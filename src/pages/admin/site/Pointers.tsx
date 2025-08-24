@@ -185,7 +185,6 @@ const Pointers = () => {
                             </button>
                         </div>
 
-                        {/* Pointer name as select */}
                         <div className="flex flex-col w-full px-4 pt-2 pb-1 bg-[#222834] border-b border-b-[#98A1B3]">
                             <select
                                 className="w-full bg-[#222834] text-[#F4F7FF] text-base focus:outline-none"

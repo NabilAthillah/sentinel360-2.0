@@ -6,6 +6,7 @@ import Loader from "../../../components/Loader";
 import MainLayout from "../../../layouts/MainLayout";
 import { useTranslation } from "react-i18next";
 import SidebarLayout from "../../../components/SidebarLayout";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 interface OccurrenceInput {
   id_site: string;
   id_category: string;
@@ -241,7 +242,7 @@ const OccurencePage = () => {
   };
 
 
-  
+
 
   // ===== Form Add Dummy =====
   const [formData, setFormData] = useState<OccurrenceInput[]>([
@@ -320,7 +321,6 @@ const OccurencePage = () => {
     document.body.removeChild(link);
   };
 
-  // ===== Lifecycle =====
   useEffect(() => {
     fetchAll();
   }, []);
@@ -331,8 +331,8 @@ const OccurencePage = () => {
 
   return (
     <MainLayout>
-      <SidebarLayout isOpen={true} closeSidebar={undefined}/>
-      <div className='flex flex-col gap-6 px-6 pb-20 w-full h-full flex-1'>
+      <SidebarLayout isOpen={true} closeSidebar={undefined} />
+      <div className='flex flex-col gap-6 pr-[156px] pl-4 pb-20 w-full h-full flex-1'>
         <h2 className='text-2xl leading-9 text-white font-noto'>{t('e-Occurrence')}</h2>
         <div className="flex flex-col gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1">
           <div className="w-full flex flex-col gap-4">
@@ -381,7 +381,7 @@ const OccurencePage = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               >
                 <option value="">{t('All employees')}</option>
-               
+
               </select>
               <select
                 className="max-w-[400px] w-full px-4 pt-[17.5px] pb-[10.5px] bg-[#222834] rounded-[4px_4px_0px_0px] text-[#F4F7FF] text-base border-b-[1px] border-b-[#98A1B3] active:outline-none focus-visible:outline-none"
@@ -410,13 +410,13 @@ const OccurencePage = () => {
               <table className="min-w-[700px] w-full">
                 <thead>
                   <tr>
-                    <th className="font-semibold text-[#98A1B3] text-start">S.NO</th>
-                    <th className="font-semibold text-[#98A1B3] text-start">Date</th>
-                    <th className="font-semibold text-[#98A1B3] text-start">Time</th>
-                    <th className="font-semibold text-[#98A1B3] text-start">Site name</th>
-                    <th className="font-semibold text-[#98A1B3] text-start">Category</th>
-                    <th className="font-semibold text-[#98A1B3] text-start">Reported by</th>
-                    <th className="font-semibold text-[#98A1B3] text-center">Actions</th>
+                    <th className="font-semibold text-[#98A1B3] text-start">{t('S.NO')}</th>
+                    <th className="font-semibold text-[#98A1B3] text-start">{('Date')}</th>
+                    <th className="font-semibold text-[#98A1B3] text-start">{t('Time')}</th>
+                    <th className="font-semibold text-[#98A1B3] text-start">{t('Site name')}</th>
+                    <th className="font-semibold text-[#98A1B3] text-start">{t('Category')}</th>
+                    <th className="font-semibold text-[#98A1B3] text-start">{t('Reported by')}</th>
+                    <th className="font-semibold text-[#98A1B3] text-center">{t('Actions')}</th>
                   </tr>
                 </thead>
                 {loadingList ? (
@@ -464,7 +464,7 @@ const OccurencePage = () => {
                     {currentItems.length === 0 && (
                       <tr>
                         <td colSpan={7} className="text-center text-white py-6">
-                          No data found.
+                          {t('No data found')}.
                         </td>
                       </tr>
                     )}
@@ -472,35 +472,37 @@ const OccurencePage = () => {
                 )}
               </table>
             </div>
-            {/* Pagination */}
-            <div className="grid grid-cols-3 w-[162px] absolute bottom-0 right-0">
+            <div className="flex items-center justify-center gap-3 absolute bottom-0 right-0">
               <button
-                className="font-medium text-xs leading-[21px] text-[#B3BACA] py-1 px-[14px] rounded-[8px_0px_0px_8px] bg-[#575F6F] disabled:opacity-50"
-                onClick={handlePrev}
-                disabled={currentPage === 1}
+                className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
               >
-                Prev
+                <ArrowLeft size={14} />
+                {t('Previous')}
               </button>
-              <button className="font-medium text-xs leading-[21px] text-[#181D26] py-1 px-3 bg-[#D4AB0B]">
-                {currentPage}
-              </button>
+
+              {/* Current Page */}
               <button
-                className="font-medium text-xs leading-[21px] text-[#B3BACA] py-1 px-[14px] rounded-[0px_8px_8px_0px] bg-[#575F6F] disabled:opacity-50"
-                onClick={handleNext}
-                disabled={currentPage === totalPages}
+                disabled
+                className="font-medium text-xs leading-[21px] text-[#181D26] py-1 px-3 bg-[#D4AB0B] rounded-md"
               >
-                Next
+                1
+              </button>
+
+              <button
+                className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
+              >
+                {t('Next')}
+                <ArrowRight size={14} />
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* EDIT MODAL (center) */}
       <CenterModal isOpen={editData} onClose={() => setEditData(false)} ariaTitle="Edit occurrence details">
         <div className="flex flex-col gap-6 p-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl leading-[36px] text-white font-noto">Edit occurrence details</h2>
+            <h2 className="text-2xl leading-[36px] text-white font-noto">{t('Edit occurrence details')}</h2>
             <button
               type="button"
               onClick={() => setEditData(false)}
@@ -510,25 +512,24 @@ const OccurencePage = () => {
               ✕
             </button>
           </div>
-          {/* Contoh field statis (sesuaikan dengan datamu) */}
           <div className="flex flex-col w-full px-4 pt-2 py-2 bg-[#222834] border-b border-b-[#98A1B3]">
-            <label className="text-xs text-[#98A1B3]">Site name</label>
+            <label className="text-xs text-[#98A1B3]">{t('Site name')}</label>
             <input type="text" className="w-full bg-[#222834] text-[#F4F7FF] text-base" value="Michael Yeow" readOnly />
           </div>
           <div className="flex flex-col w-full px-4 pt-2 py-2 bg-[#222834] border-b border-b-[#98A1B3]">
-            <label className="text-xs text-[#98A1B3]">Category</label>
+            <label className="text-xs text-[#98A1B3]">{t('Category')}</label>
             <input type="text" className="w-full bg-[#222834] text-[#F4F7FF] text-base" value="Accident" readOnly />
           </div>
           <div className="flex flex-col w-full px-4 pt-2 py-2 bg-[#222834] border-b border-b-[#98A1B3]">
-            <label className="text-xs text-[#98A1B3]">Location</label>
+            <label className="text-xs text-[#98A1B3]">{t('Location')}</label>
             <input type="text" className="w-full bg-[#222834] text-[#F4F7FF] text-base" value="Basement" readOnly />
           </div>
           <div className="flex flex-col w-full px-4 pt-2 py-2 bg-[#222834] border-b border-b-[#98A1B3]">
-            <label className="text-xs text-[#98A1B3]">When it happened</label>
+            <label className="text-xs text-[#98A1B3]">{t('When it Happened')}</label>
             <input type="text" className="w-full bg-[#222834] text-[#F4F7FF] text-base" value="19/08/2024 23:09:24" readOnly />
           </div>
           <div className="flex flex-col w-full px-4 pt-2 py-2 bg-[#222834] border-b border-b-[#98A1B3]">
-            <label className="text-xs text-[#98A1B3]">Report by</label>
+            <label className="text-xs text-[#98A1B3]">{t('Report by')}</label>
             <input type="text" className="w-full bg-[#222834] text-[#F4F7FF] text-base" value="MSN" readOnly />
           </div>
           <div className="flex gap-4 flex-wrap">
@@ -551,18 +552,17 @@ const OccurencePage = () => {
         </div>
       </CenterModal>
 
-      {/* ADD SLIDE-OVER (kanan) */}
       <SlideOver isOpen={addData} onClose={() => setAddData(false)} ariaTitle="Add occurrence" width={568}>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-6 max-h-full">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl leading-[36px] text-white font-noto">Add occurrence</h2>
+            <h2 className="text-2xl leading-[36px] text-white font-noto">{t('Add Occurrence')}</h2>
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={handleAddRow}
                 className="font-medium text-sm min-w-[142px] text-[#EFBF04] px-4 py-[9.5px] border border-[#EFBF04] rounded-full hover:bg-[#EFBF04] hover:text-[#252C38] transition-all"
               >
-                Add another
+                {t('Add Another')}
               </button>
               <button
                 type="button"
@@ -592,14 +592,14 @@ const OccurencePage = () => {
                   )}
 
                   <div className="flex flex-col w-full px-4 pt-2 py-2 bg-[#222834] border-b border-b-[#98A1B3]">
-                    <label className="text-xs text-[#98A1B3]">Site Name</label>
+                    <label className="text-xs text-[#98A1B3]">{t('Site name')}</label>
                     <select
                       className="w-full bg-[#222834] text-[#F4F7FF] text-base outline-none"
                       onChange={(e) => handleChange(realIndex, "id_site", e.target.value)}
                       value={item.id_site}
                       required
                     >
-                      <option value="">Select Site</option>
+                      <option value="">{t('Select Site')}</option>
                       {sites?.length > 0 &&
                         sites.map((s) => (
                           <option key={s.id} value={s.id}>
@@ -610,14 +610,14 @@ const OccurencePage = () => {
                   </div>
 
                   <div className="flex flex-col w-full px-4 pt-2 py-2 bg-[#222834] border-b border-b-[#98A1B3]">
-                    <label className="text-xs text-[#98A1B3]">Category</label>
+                    <label className="text-xs text-[#98A1B3]">{t('Category')}</label>
                     <select
                       className="w-full bg-[#222834] text-[#F4F7FF] text-base outline-none"
                       onChange={(e) => handleChange(realIndex, "id_category", e.target.value)}
                       value={item.id_category}
                       required
                     >
-                      <option value="">Select Category</option>
+                      <option value="">{t('Select Categoty')}</option>
                       {categories?.length > 0 &&
                         categories.map((c) => (
                           <option key={c.id} value={c.id}>
@@ -628,7 +628,7 @@ const OccurencePage = () => {
                   </div>
 
                   <div className="flex flex-col w-full px-4 pt-2 py-2 bg-[#222834] border-b border-b-[#98A1B3]">
-                    <label className="text-xs text-[#98A1B3]">Occurrence at</label>
+                    <label className="text-xs text-[#98A1B3]">{t('Occurrence at')}</label>
                     <input
                       type="datetime-local"
                       className="w-full bg-[#222834] text-[#F4F7FF] text-base outline-none"
@@ -640,7 +640,7 @@ const OccurencePage = () => {
                   </div>
 
                   <div className="flex flex-col w-full px-4 pt-2 py-2 bg-[#222834] border-b border-b-[#98A1B3]">
-                    <label className="text-xs text-[#98A1B3]">Details of occurrence</label>
+                    <label className="text-xs text-[#98A1B3]">{t('Details of Occurence')}</label>
                     <textarea
                       className="w-full bg-[#222834] text-[#F4F7FF] text-base outline-none min-h-[96px]"
                       value={item.detail}
@@ -665,7 +665,7 @@ const OccurencePage = () => {
               onClick={() => setAddData(false)}
               className="font-medium text-base text-[#868686] bg-[#252C38] px-12 py-3 border border-[#868686] rounded-full transition-all hover:bg-[#868686] hover:text-[#252C38]"
             >
-              Cancel
+              {t('Cancel')}
             </button>
           </div>
         </form>

@@ -7,6 +7,7 @@ import Navbar from "../../../../components/Navbar";
 import MainLayout from "../../../../layouts/MainLayout";
 import { useTranslation } from "react-i18next";
 import Sidebar from "../../../../components/Sidebar";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 type Category = {
     id: string;
@@ -105,7 +106,7 @@ const OccurrenceCatgPage = () => {
     return (
         <MainLayout>
             <Sidebar isOpen={true} closeSidebar={undefined} />
-            <div className="flex flex-col gap-4 px-6 pb-20 w-full h-full flex-1">
+            <div className="flex flex-col gap-4 pl-4 pr-[156px] pb-20 w-full h-full flex-1">
                 <h2 className="text-2xl leading-9 text-white font-noto">
                     {t("Settings")}
                 </h2>
@@ -230,23 +231,26 @@ const OccurrenceCatgPage = () => {
                                 </table>
                             </div>
 
-                            <div className="grid grid-cols-3 w-fit absolute bottom-0 right-0">
+                            <div className="flex items-center justify-center gap-3 absolute bottom-0 right-0">
                                 <button
-                                    className="font-medium text-xs text-[#B3BACA] py-1 px-4 rounded-l bg-[#575F6F] disabled:opacity-50"
-                                    onClick={goPrev}
-                                    disabled={currentPage === 1 || loading}
+                                    className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
                                 >
-                                    Prev
+                                    <ArrowLeft size={14} />
+                                    {t('Previous')}
                                 </button>
-                                <button className="font-medium text-xs text-[#181D26] py-1 px-3 bg-[#D4AB0B]">
-                                    {currentPage}
-                                </button>
+
                                 <button
-                                    className="font-medium text-xs text-[#B3BACA] py-1 px-4 rounded-r bg-[#575F6F] disabled:opacity-50"
-                                    onClick={goNext}
-                                    disabled={currentPage === totalPages || loading}
+                                    disabled
+                                    className="font-medium text-xs leading-[21px] text-[#181D26] py-1 px-3 bg-[#D4AB0B] rounded-md"
                                 >
-                                    Next
+                                    1
+                                </button>
+
+                                <button
+                                    className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
+                                >
+                                    {t('Next')}
+                                    <ArrowRight size={14} />
                                 </button>
                             </div>
                         </div>
@@ -274,9 +278,9 @@ const OccurrenceCatgPage = () => {
                             transition={{ type: "spring", stiffness: 380, damping: 28 }}
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <h2 className="text-2xl leading-[36px] text-white font-noto">Edit Category</h2>
+                            <h2 className="text-2xl leading-[36px] text-white font-noto">{t("Edit Category")}</h2>
                             <div className="flex flex-col w-full px-4 pt-2 py-2 rounded-[4px_4px_0px_0px] bg-[#222834] border-b-[1px] border-b-[#98A1B3]">
-                                <label className="text-xs leading-[21px] text-[#98A1B3]">Category name</label>
+                                <label className="text-xs leading-[21px] text-[#98A1B3]">{t("Category Name")}</label>
                                 <input
                                     type="text"
                                     className="w-full bg-[#222834] text-[#F4F7FF] text-base placeholder:text-[#98A1B3] placeholder:text-base active:outline-none focus-visible:outline-none"
@@ -295,7 +299,7 @@ const OccurrenceCatgPage = () => {
                                     type="button"
                                     className="font-medium text-base leading-[21px] text-[#868686] bg-[#252C38] px-12 py-3 border-[1px] border-[#868686] rounded-full transition-all hover:bg-[#868686] hover:text-[#252C38]"
                                 >
-                                    Cancel
+                                    {t("Cancel")}
                                 </button>
                                 <button
                                     type="submit"
@@ -330,9 +334,9 @@ const OccurrenceCatgPage = () => {
                             transition={{ type: "spring", stiffness: 380, damping: 28 }}
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <h2 className="text-2xl leading-[36px] text-white font-noto">Add Category</h2>
+                            <h2 className="text-2xl leading-[36px] text-white font-noto">{t("Add Category")}</h2>
                             <div className="flex flex-col w-full px-4 pt-2 py-2 rounded-[4px_4px_0px_0px] bg-[#222834] border-b-[1px] border-b-[#98A1B3]">
-                                <label className="text-xs leading-[21px] text-[#98A1B3]">Category name</label>
+                                <label className="text-xs leading-[21px] text-[#98A1B3]">{t("Category Name")}</label>
                                 <input
                                     type="text"
                                     className="w-full bg-[#222834] text-[#F4F7FF] text-base placeholder:text-[#98A1B3] placeholder:text-base active:outline-none focus-visible:outline-none"
@@ -348,7 +352,7 @@ const OccurrenceCatgPage = () => {
                                     type="button"
                                     className="font-medium text-base leading-[21px] text-[#868686] bg-[#252C38] px-12 py-3 border-[1px] border-[#868686] rounded-full transition-all hover:bg-[#868686] hover:text-[#252C38]"
                                 >
-                                    Cancel
+                                    {t("Cancel")}
                                 </button>
                                 <button
                                     type="submit"

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { AnimatePresence } from "framer-motion";
 import SidebarLayout from "../../../components/SidebarLayout";
 import Loader from "../../../components/Loader";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 // Dummy tipe employee
 type SiteEmployee = {
@@ -88,7 +89,7 @@ const AttendancePage = () => {
     return (
         <MainLayout>
             <SidebarLayout isOpen={true} closeSidebar={undefined} />
-            <div className="flex flex-col gap-6 px-6 pb-20 w-full h-full flex-1">
+            <div className="flex flex-col gap-6 pr-[156px] pl-4 pb-20 w-full h-full flex-1">
                 <h2 className="text-2xl leading-9 text-white font-noto">{t("Attendance")}</h2>
                 <div className="flex flex-col gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1">
                     <div className="w-full flex flex-col gap-4">
@@ -181,66 +182,108 @@ const AttendancePage = () => {
                                         ) : (
                                             <tr>
                                                 <td colSpan={8} className="text-center text-[#F4F7FF] py-6">
-                                                    No records found
+                                                    {t('No records found')}
                                                 </td>
                                             </tr>
                                         )}
                                     </tbody>
                                 )}
                             </table>
+                            <div className="flex items-center justify-center gap-3 absolute bottom-0 right-0">
+                                <button
+                                    className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
+                                >
+                                    <ArrowLeft size={14} />
+                                    {t('Previous')}
+                                </button>
+
+                                {/* Current Page */}
+                                <button
+                                    disabled
+                                    className="font-medium text-xs leading-[21px] text-[#181D26] py-1 px-3 bg-[#D4AB0B] rounded-md"
+                                >
+                                    1
+                                </button>
+
+                                <button
+                                    className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
+                                >
+                                    {t('Next')}
+                                    <ArrowRight size={14} />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Edit Modal */}
             <AnimatePresence>
-                {editData && (
-                    <div className="fixed w-screen h-screen flex justify-end items-start top-0 left-0 z-50 bg-[rgba(0,0,0,0.5)]">
-                        <div className="flex flex-col gap-6 p-6 bg-[#252C38] max-w-[568px] w-full max-h-screen overflow-auto h-full">
-                            <h2 className="text-2xl leading-[36px] text-white font-noto">{t("Edit attendance details")}</h2>
-                            <input
-                                type="text"
-                                className="w-full px-4 py-2 bg-[#222834] text-white"
-                                value={formData.name}
-                                onChange={(e) => handleChange("name", e.target.value)}
-                            />
-                            <input
-                                type="time"
-                                className="w-full px-4 py-2 bg-[#222834] text-white"
-                                value={formData.time_in}
-                                onChange={(e) => handleChange("time_in", e.target.value)}
-                            />
-                            <input
-                                type="time"
-                                className="w-full px-4 py-2 bg-[#222834] text-white"
-                                value={formData.time_out}
-                                onChange={(e) => handleChange("time_out", e.target.value)}
-                            />
-                            <input
-                                type="text"
-                                className="w-full px-4 py-2 bg-[#222834] text-white"
-                                placeholder="Reason"
-                                value={formData.early_checkout_reason}
-                                onChange={(e) => handleChange("early_checkout_reason", e.target.value)}
-                            />
-                            <div className="flex gap-4">
-                                <button onClick={handleEdit} className="bg-[#EFBF04] px-6 py-2 rounded text-black">Save</button>
-                                <button onClick={() => setEditData(false)} className="bg-gray-600 px-6 py-2 rounded text-white">Cancel</button>
+                {
+                    editData && (
+
+                        <div className="fixed w-screen h-screen flex justify-end items-start top-0 left-0 z-50 bg-[rgba(0,0,0,0.5)]">
+                            <div className="flex flex-col gap-6 p-6 bg-[#252C38] max-w-[568px] w-full max-h-screen overflow-auto h-full">
+                                <h2 className='text-2xl leading-[36px] text-white font-noto'> {t('Edit attendance details')}</h2>
+                                <div className="flex flex-col w-full px-4 pt-2 py-2 rounded-[4px_4px_0px_0px] bg-[#222834] border-b-[1px] border-b-[#98A1B3]">
+                                    <label htmlFor="" className="text-xs leading-[21px] text-[#98A1B3]"> {t('Name')}</label>
+                                    <input
+                                        type={"text"}
+                                        className="w-full bg-[#222834] text-[#F4F7FF] text-base placeholder:text-[#98A1B3] placeholder:text-base active:outline-none focus-visible:outline-none"
+                                        placeholder='Name'
+                                        value={formData.name}
+                                        onChange={(e) => handleChange("name", e.target.value)}
+                                    />
+                                </div>
+                                <div className="flex flex-col w-full px-4 pt-2 py-2 rounded-[4px_4px_0px_0px] bg-[#222834] border-b-[1px] border-b-[#98A1B3]">
+                                    <label htmlFor="time_in" className="text-xs leading-[21px] text-[#98A1B3]">{t('In Time')}</label>
+                                    <input
+                                        type="time"
+                                        id="time_in"
+                                        className="w-full bg-[#222834] text-[#F4F7FF] text-base active:outline-none focus-visible:outline-none"
+                                        value={formData.time_in}
+                                        onChange={(e) => handleChange("time_in", e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="flex flex-col w-full px-4 pt-2 py-2 rounded-[4px_4px_0px_0px] bg-[#222834] border-b-[1px] border-b-[#98A1B3]">
+                                    <label htmlFor="time_out" className="text-xs leading-[21px] text-[#98A1B3]">{t('Out Time')}</label>
+                                    <input
+                                        type="time"
+                                        id="time_out"
+                                        className="w-full bg-[#222834] text-[#F4F7FF] text-base active:outline-none focus-visible:outline-none"
+                                        value={formData.time_out}
+                                        onChange={(e) => handleChange("time_out", e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="flex flex-col w-full px-4 pt-2 py-2 rounded-[4px_4px_0px_0px] bg-[#222834] border-b-[1px] border-b-[#98A1B3]">
+                                    <label htmlFor="" className="text-xs leading-[21px] text-[#98A1B3]">{t('Early checkout reason')}</label>
+                                    <input
+                                        type={"text"}
+                                        className="w-full bg-[#222834] text-[#F4F7FF] text-base placeholder:text-[#98A1B3] placeholder:text-base active:outline-none focus-visible:outline-none"
+                                        placeholder='Early checkout reason'
+                                        value={formData.early_checkout_reason}
+                                        onChange={(e) => handleChange("early_checkout_reason", e.target.value)}
+
+                                    />
+                                </div>
+                                <div className="flex gap-4 flex-wrap">
+                                    <button onClick={handleEdit} className="font-medium text-base leading-[21px] text-[#181D26] bg-[#EFBF04] px-12 py-3 border-[1px] border-[#EFBF04] rounded-full transition-all hover:bg-[#181D26] hover:text-[#EFBF04]">{t('Save')}</button>
+                                    <button onClick={() => setEditData(false)} className="font-medium text-base leading-[21px] text-[#868686] bg-[#252C38] px-12 py-3 border-[1px] border-[#868686] rounded-full transition-all hover:bg-[#868686] hover:text-[#252C38]">{t('Cancel')}</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )
+                }
             </AnimatePresence>
 
-            {/* Delete Modal */}
             {deleteModal && (
                 <div className="fixed w-screen h-screen flex justify-center items-center top-0 left-0 z-50 bg-[rgba(0,0,0,0.5)]">
                     <div className="bg-[#252C38] p-6 rounded-lg">
-                        <p className="text-white mb-4">Are you sure to delete?</p>
+                        <p className="text-white mb-4">{t('Are you sure to delete')}?</p>
                         <div className="flex gap-4">
-                            <button onClick={handleDelete} className="bg-red-500 px-6 py-2 rounded text-white">Delete</button>
-                            <button onClick={() => setDeleteModal(false)} className="bg-gray-500 px-6 py-2 rounded text-white">Cancel</button>
+                            <button onClick={handleDelete} className="bg-red-500 px-6 py-2 rounded text-white">{t('Delete')}</button>
+                            <button onClick={() => setDeleteModal(false)} className="bg-gray-500 px-6 py-2 rounded text-white">{t('Cancel')}</button>
                         </div>
                     </div>
                 </div>

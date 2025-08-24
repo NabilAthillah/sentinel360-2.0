@@ -5,6 +5,7 @@ import MainLayout from "../../../../layouts/MainLayout";
 import Loader from "../../../../components/Loader";
 import Sidebar from "../../../../components/Sidebar";
 import { useTranslation } from "react-i18next";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 type Role = {
     id: string;
@@ -149,7 +150,7 @@ const RolesPage = () => {
     return (
         <MainLayout>
             <Sidebar isOpen={true} closeSidebar={undefined} />
-            <div className="flex flex-col gap-4 px-6 pb-20 w-full h-full flex-1">
+            <div className="flex flex-col gap-4 pr-[156px] pl-4 pb-20 w-full h-full flex-1">
                 <h2 className="text-2xl leading-9 text-white font-noto">Roles</h2>
                 <div className="flex flex-col gap-8 w-full h-full flex-1">
                     <Navbar />
@@ -223,23 +224,23 @@ const RolesPage = () => {
                                     )}
                                 </table>
                             </div>
-                            <div className="grid grid-cols-3 w-fit absolute bottom-0 right-0">
+                            <div className="absolute bottom-0 right-0 flex gap-2">
                                 <button
-                                    className="py-1 px-3 bg-[#575F6F] text-white disabled:opacity-50"
-                                    onClick={handlePrev}
                                     disabled={currentPage === 1}
+                                    className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
                                 >
-                                    Prev
+                                    <ArrowLeft size={14} />
+                                    {t('Previous')}
                                 </button>
-                                <button className="py-1 px-3 bg-[#D4AB0B] text-black">
+                                <button className="font-medium text-xs text-[#181D26] py-1 px-3 bg-[#D4AB0B]">
                                     {currentPage}
                                 </button>
                                 <button
-                                    className="py-1 px-3 bg-[#575F6F] text-white disabled:opacity-50"
-                                    onClick={handleNext}
                                     disabled={currentPage === totalPages}
+                                    className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
                                 >
-                                    Next
+                                    {t('Next')}
+                                    <ArrowRight size={14} />
                                 </button>
                             </div>
                         </div>

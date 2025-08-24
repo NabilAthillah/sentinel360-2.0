@@ -8,6 +8,7 @@ import Navbar from "../../../../components/Navbar";
 import MainLayout from "../../../../layouts/MainLayout";
 import { useTranslation } from 'react-i18next';
 import Sidebar from "../../../../components/Sidebar";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 interface SopDocument {
     id: string;
     name: string;
@@ -18,7 +19,7 @@ const SopDocumentPage = () => {
     const [viewDoc, setViewDoc] = useState(false);
     const [editDoc, setEditDoc] = useState(false);
     const [addDoc, setAddDoc] = useState(false);
-    const [sop ,setSop] = useState(false)
+    const [sop, setSop] = useState(false)
     const [editData, setEditData] = useState(false);
     const [sidebar, setSidebar] = useState(false);
     const [addSop, setAddSop] = useState(false);
@@ -108,8 +109,8 @@ const SopDocumentPage = () => {
 
     return (
         <MainLayout>
-            <Sidebar isOpen={true} closeSidebar={undefined}/>
-            <div className='flex flex-col gap-4 px-6 pb-20 w-full h-full flex-1'>
+            <Sidebar isOpen={true} closeSidebar={undefined} />
+            <div className='flex flex-col gap-4 pr-[156px] pl-4 pb-20 w-full h-full flex-1'>
                 <h2 className='text-2xl leading-9 text-white font-noto'>{t('Settings')}</h2>
                 <div className="flex flex-col gap-8 w-full h-full flex-1">
                     <Navbar />
@@ -157,7 +158,7 @@ const SopDocumentPage = () => {
                                                     <td className="text-[#F4F7FF] pt-6 pb-3">{Sop.name}</td>
                                                     <td className="pt-6 pb-3">
                                                         <div className="flex gap-6 items-center justify-center">
-                                                            <svg onClick={() => { setViewDoc(true);  }} className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" version="1.1" width="28" height="28" viewBox="0 0 28 28"><defs><clipPath id="master_svg0_247_10443"><rect x="0" y="0" width="28" height="28" rx="0" /></clipPath></defs><g><g clip-path="url(#master_svg0_247_10443)"><g>
+                                                            <svg onClick={() => { setViewDoc(true); }} className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" version="1.1" width="28" height="28" viewBox="0 0 28 28"><defs><clipPath id="master_svg0_247_10443"><rect x="0" y="0" width="28" height="28" rx="0" /></clipPath></defs><g><g clip-path="url(#master_svg0_247_10443)"><g>
                                                                 <path d="M14.0002921875,5.25C8.1669921875,5.25,3.1853221875,8.87833,1.1669921875,14C3.1853221875,19.1217,8.1669921875,22.75,14.0002921875,22.75C19.8336921875,22.75,24.8152921875,19.1217,26.8336921875,14C24.8152921875,8.87833,19.8336921875,5.25,14.0002921875,5.25ZM14.0002921875,19.8333C10.7803221875,19.8333,8.1669921875,17.22,8.1669921875,14C8.1669921875,10.780000000000001,10.7803221875,8.16667,14.0002921875,8.16667C17.2202921875,8.16667,19.8336921875,10.780000000000001,19.8336921875,14C19.8336921875,17.22,17.2202921875,19.8333,14.0002921875,19.8333ZM14.0002921875,10.5C12.0636921875,10.5,10.5003221875,12.06333,10.5003221875,14C10.5003221875,15.9367,12.0636921875,17.5,14.0002921875,17.5C15.9369921875,17.5,17.5002921875,15.9367,17.5002921875,14C17.5002921875,12.06333,15.9369921875,10.5,14.0002921875,10.5Z" fill="#F4F7FF" fill-opacity="1" /></g></g></g>
                                                             </svg>
                                                             <svg onClick={() => {
@@ -206,25 +207,23 @@ const SopDocumentPage = () => {
                                     </tbody>
                                 </table>
                             </div>
-                            <div className="grid grid-cols-3 w-fit absolute bottom-0 right-0">
+                            <div className="absolute bottom-0 right-0 flex gap-2">
                                 <button
-                                    onClick={goToPrevPage}
                                     disabled={currentPage === 1}
-                                    className="font-medium text-xs leading-[21px] text-[#B3BACA] py-1 px-[14px] rounded-[8px_0px_0px_8px] bg-[#575F6F] disabled:opacity-50"
+                                    className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
                                 >
-                                    {t('Prev')}
+                                    <ArrowLeft size={14} />
+                                    {t('Previous')}
                                 </button>
-                                <button
-                                    className="font-medium text-xs leading-[21px] text-[#181D26] py-1 px-3 bg-[#D4AB0B]"
-                                >
+                                <button className="font-medium text-xs text-[#181D26] py-1 px-3 bg-[#D4AB0B]">
                                     {currentPage}
                                 </button>
                                 <button
-                                    onClick={goToNextPage}
                                     disabled={currentPage === totalPages}
-                                    className="font-medium text-xs leading-[21px] text-[#B3BACA] py-1 px-[14px] rounded-[0px_8px_8px_0px] bg-[#575F6F] disabled:opacity-50"
+                                    className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
                                 >
                                     {t('Next')}
+                                    <ArrowRight size={14} />
                                 </button>
                             </div>
                         </div>

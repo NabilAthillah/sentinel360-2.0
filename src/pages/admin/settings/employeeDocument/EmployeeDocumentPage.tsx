@@ -7,6 +7,7 @@ import MainLayout from "../../../../layouts/MainLayout";
 import Loader from "../../../../components/Loader";
 import { useTranslation } from "react-i18next";
 import Sidebar from "../../../../components/Sidebar";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 type EmployeeDocument = {
     id: string;
@@ -80,13 +81,13 @@ const EmployeeDocumentPage = () => {
     return (
         <MainLayout>
             <Sidebar isOpen={true} closeSidebar={undefined} />
-            <div className="flex flex-col gap-4 px-6 pb-20 w-full h-full flex-1">
+            <div className="flex flex-col gap-4 pl-4 pr-[156px] pb-20 w-full h-full flex-1">
                 <h2 className="text-2xl leading-9 text-white font-noto">
                     {t("Settings")}
                 </h2>
                 <div className="flex flex-col gap-8 w-full h-full flex-1">
                     <Navbar />
-                    <div className="flex flex-col gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1">
+                    <div className="flex flex-col gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1 relative">
                         <div className="w-full flex justify-between items-center gap-4 flex-wrap lg:flex-nowrap">
                             <div className="flex items-end gap-4 w-full">
                                 <div className="max-w-[400px] w-full flex items-center bg-[#222834] border-b-[1px] border-b-[#98A1B3] rounded-[4px_4px_0px_0px]">
@@ -172,7 +173,30 @@ const EmployeeDocumentPage = () => {
                                 </tbody>
                             )}
                         </table>
+                        <div className="flex items-center justify-center gap-3 absolute bottom-4 right-4">
+                            <button
+                                className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
+                            >
+                                <ArrowLeft size={14} />
+                                {t('Previous')}
+                            </button>
+
+                            <button
+                                disabled
+                                className="font-medium text-xs leading-[21px] text-[#181D26] py-1 px-3 bg-[#D4AB0B] rounded-md"
+                            >
+                                1
+                            </button>
+
+                            <button
+                                className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
+                            >
+                                {t('Next')}
+                                <ArrowRight size={14} />
+                            </button>
+                        </div>
                     </div>
+
                 </div>
             </div>
 

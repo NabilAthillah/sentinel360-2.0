@@ -4,6 +4,7 @@ import Loader from "../../../components/Loader";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import SidebarLayout from "../../../components/SidebarLayout";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 // Dummy data
 const categories = ["login", "update", "delete", "create"];
@@ -47,7 +48,7 @@ const AuditTrailsPage = () => {
         const timer = setTimeout(() => {
             setLogs(dummyLogs);
             setLoading(false);
-        }, 1200); 
+        }, 1200);
         return () => clearTimeout(timer);
     }, []);
 
@@ -85,14 +86,14 @@ const AuditTrailsPage = () => {
 
     return (
         <MainLayout>
-            <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar}  />
-            <div className="flex flex-col gap-6 px-6 pb-20 w-full min-h-[calc(100vh-91px)] h-full">
+            <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
+            <div className="flex flex-col gap-6 pl-4 pr-[156px] pb-20 w-full min-h-[calc(100vh-91px)] h-full">
                 <h2 className="text-2xl leading-9 text-white font-noto">
                     {t("Audit Trails")}
                 </h2>
 
                 <div className="flex flex-col gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1 relative">
-                    {/* Filter */}
+
                     <div className="flex flex-wrap gap-4">
                         <select
                             className="max-w-[250px] w-full h-[44px] px-4 bg-[#222834] text-[#F4F7FF] border-b border-[#98A1B3] rounded-t-md"
@@ -218,6 +219,28 @@ const AuditTrailsPage = () => {
                                     )}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="flex items-center justify-center gap-3 absolute bottom-0 right-0">
+                            <button
+                                className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
+                            >
+                                <ArrowLeft size={14} />
+                                {t('Previous')}
+                            </button>
+
+                            <button
+                                disabled
+                                className="font-medium text-xs leading-[21px] text-[#181D26] py-1 px-3 bg-[#D4AB0B] rounded-md"
+                            >
+                                1
+                            </button>
+
+                            <button
+                                className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
+                            >
+                                {t('Next')}
+                                <ArrowRight size={14} />
+                            </button>
                         </div>
                     </div>
 

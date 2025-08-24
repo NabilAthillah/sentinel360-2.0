@@ -7,6 +7,7 @@ import Navbar from "../../../../components/Navbar";
 import MainLayout from "../../../../layouts/MainLayout";
 import { useTranslation } from "react-i18next";
 import Sidebar from "../../../../components/Sidebar";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 type IncidentType = {
     id: string;
@@ -105,7 +106,7 @@ const IncidentPageMaster = () => {
     return (
         <MainLayout>
             <Sidebar isOpen={true} closeSidebar={undefined} />
-            <div className="flex flex-col gap-4 px-6 pb-20 w-full h-full flex-1">
+            <div className="flex flex-col gap-4 pl-4 pr-[156px] pb-20 w-full h-full flex-1">
                 <h2 className="text-2xl leading-9 text-white font-noto">
                     {t("Settings")}
                 </h2>
@@ -220,15 +221,14 @@ const IncidentPageMaster = () => {
                                     </tbody>
                                 </table>
                             </div>
-
-                            {/* Pagination */}
                             <div className="absolute bottom-0 right-0 flex gap-2">
                                 <button
                                     onClick={goToPrevPage}
                                     disabled={currentPage === 1}
-                                    className="font-medium text-xs text-[#B3BACA] py-1 px-4 rounded-l bg-[#575F6F] disabled:opacity-50"
+                                    className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
                                 >
-                                    {t("Prev")}
+                                    <ArrowLeft size={14} />
+                                    {t('Previous')}
                                 </button>
                                 <button className="font-medium text-xs text-[#181D26] py-1 px-3 bg-[#D4AB0B]">
                                     {currentPage}
@@ -236,9 +236,10 @@ const IncidentPageMaster = () => {
                                 <button
                                     onClick={goToNextPage}
                                     disabled={currentPage === totalPages}
-                                    className="font-medium text-xs text-[#B3BACA] py-1 px-4 rounded-r bg-[#575F6F] disabled:opacity-50"
+                                    className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
                                 >
-                                    {t("Next")}
+                                    {t('Next')}
+                                    <ArrowRight size={14} />
                                 </button>
                             </div>
                         </div>
@@ -285,7 +286,7 @@ const IncidentPageMaster = () => {
                 )}
             </AnimatePresence>
 
-                     <AnimatePresence>
+            <AnimatePresence>
                 {addIncident && (
                     <motion.div
                         key="edit-overlay"

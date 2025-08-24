@@ -25,7 +25,7 @@ const IncidentTypePage = () => {
     return (
         <MainLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
-            <div className='flex flex-col gap-6 px-6 pb-20 w-full h-full flex-1'>
+            <div className='flex flex-col gap-6 pr-[156px] pl-4 pb-20 w-full h-full flex-1'>
                 <h2 className='text-2xl leading-9 text-white font-noto'>{t('Incidents')}</h2>
                 <div className="flex flex-col gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1">
                     <div className="w-full flex flex-col gap-4 flex-wrap">
@@ -107,14 +107,13 @@ const IncidentTypePage = () => {
                                 {t('Previous')}
                             </button>
 
-                            {/* Current Page */}
                             <button
                                 disabled
                                 className="font-medium text-xs leading-[21px] text-[#181D26] py-1 px-3 bg-[#D4AB0B] rounded-md"
                             >
+                                1
                             </button>
 
-                            {/* Next */}
                             <button
                                 className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
                             >

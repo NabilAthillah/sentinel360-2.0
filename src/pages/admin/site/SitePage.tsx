@@ -107,7 +107,7 @@ const SitesPage = () => {
         <MainLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
 
-            <div className="flex flex-col gap-6 px-6 pr-28 pb-20 w-full h-full flex-1">
+            <div className="flex flex-col gap-6 pl-4 pr-[156px] pb-20 w-full h-full flex-1">
                 <h2 className="text-2xl leading-9 text-white font-noto">{t("Sites")}</h2>
                 <nav className="flex flex-wrap border-b border-[#2E3544]">
                     <Link

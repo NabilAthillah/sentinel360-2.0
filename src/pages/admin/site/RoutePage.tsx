@@ -210,7 +210,7 @@ const RoutePage = () => {
     return (
         <MainLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
-            <div className="flex flex-col gap-6 px-6 pb-20 w-full h-full flex-1">
+            <div className="flex flex-col gap-6 pr-[156px] pl-4 pb-20 w-full h-full flex-1">
                 <h2 className="text-2xl leading-9 text-white font-noto">{t('Routes')}</h2>
                 <div className="flex flex-col gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1">
                     <div className="flex justify-between items-center flex-wrap gap-4">

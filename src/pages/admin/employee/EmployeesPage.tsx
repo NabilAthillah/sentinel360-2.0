@@ -574,7 +574,6 @@ const EmployeesPage = () => {
                                     {t('Previous')}
                                 </button>
 
-                                {/* Current Page */}
                                 <button
                                     disabled
                                     className="font-medium text-xs leading-[21px] text-[#181D26] py-1 px-3 bg-[#D4AB0B] rounded-md"
@@ -582,7 +581,6 @@ const EmployeesPage = () => {
                                     {currentPage}
                                 </button>
 
-                                {/* Next */}
                                 <button
                                     onClick={goToNextPage}
                                     disabled={currentPage === totalPages}
@@ -735,8 +733,6 @@ const EmployeesPage = () => {
                                         </div>
                                     ))}
                                 </div>
-
-                                {/* ACTION BUTTONS */}
                                 <div className="flex gap-4 justify-end">
                                     <button
                                         type="button"

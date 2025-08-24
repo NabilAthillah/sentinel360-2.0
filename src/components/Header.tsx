@@ -12,13 +12,15 @@ const Header = ({ openSidebar, user, handleLogout, }: { openSidebar: any; user: 
     const { t, i18n } = useTranslation();
     const rootRef = useRef<HTMLDivElement>(null);
     const firstItemRef = useRef<HTMLAnchorElement>(null);
-
+    const langButtonRef = useRef<HTMLButtonElement>(null);
 
 
     const handleLanguageChange = (lang: "en" | "ms") => {
         setLanguage(lang);
+        i18n.changeLanguage(lang); 
         setLangDropdownOpen(false);
     };
+
 
     const menuVariants: Variants = {
         hidden: { opacity: 0, y: -6, scale: 0.98 },

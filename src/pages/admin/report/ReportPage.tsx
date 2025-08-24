@@ -3,6 +3,7 @@ import MainLayout from '../../../layouts/MainLayout'
 import { use } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import SidebarLayout from '../../../components/SidebarLayout'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 const ReportPage = () => {
     const { t } = useTranslation();
@@ -19,10 +20,11 @@ const ReportPage = () => {
     return (
         <MainLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
-            <div className="flex flex-col gap-6 px-6 pb-20 w-full h-full flex-1 pr-28">
+            <div className="flex flex-col gap-6 pr-[156px] pl-4 pb-20 w-full h-full flex-1 pr-28">
                 <h2 className="text-2xl leading-9 text-white font-noto">{t('Report')}</h2>
 
-                <div className="flex flex-col pr-12 gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1">
+                <div className="flex flex-col pr-12 gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1 relative">
+
                     <div className="flex items-end gap-4 w-fit flex-wrap md:flex-nowrap">
                         <div className="w-[400px] w-full flex items-center bg-[#222834] border-b-[1px] border-b-[#98A1B3] rounded-[4px_4px_0px_0px]">
                             <input
@@ -57,8 +59,30 @@ const ReportPage = () => {
                             </div>
                         ))}
                     </div>
+                    <div className="flex items-center justify-center gap-3 absolute bottom-0 right-3">
+                        <button
+                            className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
+                        >
+                            <ArrowLeft size={14} />
+                            {t('Previous')}
+                        </button>
 
+                        <button
+                            disabled
+                            className="font-medium text-xs leading-[21px] text-[#181D26] py-1 px-3 bg-[#D4AB0B] rounded-md"
+                        >
+                            1
+                        </button>
+
+                        <button
+                            className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
+                        >
+                            {t('Next')}
+                            <ArrowRight size={14} />
+                        </button>
+                    </div>
                 </div>
+
             </div>
         </MainLayout>
     )
