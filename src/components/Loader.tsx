@@ -1,7 +1,7 @@
 
 const Loader = ({primary}: {primary: boolean}) => {
     return (
-        <div className="grid h-fit w-full place-items-center overflow-x-scroll rounded-lg lg:overflow-visible">
+        <div className="grid h-fit w-full place-items-center overflow-hidden rounded-lg">
             <svg className={`${primary ? 'text-[#EFBF04]' : 'text-[#181D26]'} animate-spin`} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"
                 width="24" height="24">
                 <path

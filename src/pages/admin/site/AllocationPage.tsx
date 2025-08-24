@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import MainLayout from "../../../layouts/MainLayout";
-import AllocationDnD from "../../../components/AllocationDnD";
+// import AllocationDnD from "../../../components/AllocationDnD";
 import Loader from "../../../components/Loader";
 import { Site } from "../../../types/site";
 import SidebarLayout from "../../../components/SidebarLayout";
@@ -96,7 +96,7 @@ const AllocationPage = () => {
                     </div>
                 </div>
                 <div className="flex flex-col rounded-lg w-full h-full flex-1">
-                    <AllocationDnD sites={sites} setLoading={setLoading} allocationType={allocationType} shiftType={shiftType} date={date} />
+                    {/* <AllocationDnD sites={sites} setLoading={setLoading} allocationType={allocationType} shiftType={shiftType} date={date} /> */}
                 </div>
             </div>
         </MainLayout>

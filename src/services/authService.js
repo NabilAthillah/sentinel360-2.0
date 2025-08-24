@@ -3,12 +3,24 @@ import api from '../utils/api';
 // Authentication service
 const authService = {
   // Login admin
-  login: async (email, password) => {
+  // login: async (email, password) => {
+  //   try {
+  //     const response = await api.post('/auth/login', {
+  //       email: email,
+  //       password: password
+  //     });
+  //     if (response.data) {
+  //       return response.data;
+  //     }
+  //   } catch (error) {
+  //     throw error.response ? error.response.data : { message: 'Network error' };
+  //   }
+  // },
+
+  login: async (loginData) => {
     try {
-      const response = await api.post('/auth/login', {
-        email: email,
-        password: password
-      });
+      const response = await api.post('/auth/login', loginData);
+
       if (response.data) {
         return response.data;
       }
@@ -72,23 +84,19 @@ const authService = {
     }
   },
 
-  updateProfile: async (id, token, name, address, mobile, email, old_password, new_password, profile) => {
+  updateProfile: async (data, id) => {
     try {
-      const response = await api.post('/auth/update-profile', {
-        id,
-        name,
-        address,
-        mobile,
-        email,
-        old_password,
-        new_password,
-        profile
-      }, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      const response = await api.post(`/user/update-profile/${id}`, data)
 
+      return response.data;
+    } catch (error) {
+      throw error.response ? error.response.data : { message: 'Network error' };
+    }
+  },
+
+  checkToken: async (token) => {
+    try {
+      const response = await api.get('/check-token');
       return response.data;
     } catch (error) {
       throw error.response ? error.response.data : { message: 'Network error' };

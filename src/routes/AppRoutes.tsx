@@ -76,7 +76,6 @@ const AppRoutes = () => {
                 <Route path='/dashboard/settings/sop-document' element={<SopDocumentPage />} />
                 <Route path='/dashboard/settings/profile' element={<ProfilePage />} />
 
-
                 <Route path='/user' element={<HomePage />} />
                 <Route path='/user/guard-tour' element={<GuardTourPage/>} />
                 <Route path='/user/guard-tour/selection' element={<Selection/>} />

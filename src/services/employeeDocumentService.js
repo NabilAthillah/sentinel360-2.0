@@ -3,7 +3,7 @@ import api from "../utils/api";
 const employeeDocumentService = {
     getEmployeeDocuments: async (token, employeeId) => {
         try {
-            const response = await api.get(`/employee-documents`, {
+            const response = await api.get(`master-settings/employee-documents`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -19,7 +19,7 @@ const employeeDocumentService = {
 
     addEmployeeDocument: async (token, name) => {
         try {
-            const response = await api.post(`/employee-documents`, {
+            const response = await api.post(`master-settings/employee-documents`, {
                 name,
             }, {
                 headers: {
@@ -37,7 +37,7 @@ const employeeDocumentService = {
 
     editEmployeeDocument: async (token, id, name) => {
         try {
-            const response = await api.put(`/employee-documents/${id}`, {
+            const response = await api.put(`master-settings/employee-documents/${id}`, {
                 name,
             }, {
                 headers: {
@@ -55,7 +55,7 @@ const employeeDocumentService = {
 
     editEmployeeDocumentStatus: async (token, id, status) => {
         try {
-            const response = await api.put(`/employee-documents/${id}`, {
+            const response = await api.put(`master-settings/employee-documents/${id}`, {
                 status,
             }, {
                 headers: {
