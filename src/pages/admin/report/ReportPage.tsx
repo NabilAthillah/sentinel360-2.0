@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import MainLayout from '../../../layouts/MainLayout'
+import SecondLayout from '../../../layouts/SecondLayout'
 import { use } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import SidebarLayout from '../../../components/SidebarLayout'
@@ -18,7 +18,7 @@ const ReportPage = () => {
     ]
 
     return (
-        <MainLayout>
+        <SecondLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
             <div className="flex flex-col gap-6 pr-[156px] pl-4 pb-20 w-full h-full flex-1 pr-28">
                 <h2 className="text-2xl leading-9 text-white font-noto">{t('Report')}</h2>
@@ -84,7 +84,7 @@ const ReportPage = () => {
                 </div>
 
             </div>
-        </MainLayout>
+        </SecondLayout>
     )
 }
 

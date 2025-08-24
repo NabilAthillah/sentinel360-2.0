@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import MainLayout from "../../../layouts/MainLayout";
+import SecondLayout from "../../../layouts/SecondLayout";
 import Loader from "../../../components/Loader";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
@@ -85,7 +85,7 @@ const AuditTrailsPage = () => {
     };
 
     return (
-        <MainLayout>
+        <SecondLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
             <div className="flex flex-col gap-6 pl-4 pr-[156px] pb-20 w-full min-h-[calc(100vh-91px)] h-full">
                 <h2 className="text-2xl leading-9 text-white font-noto">
@@ -278,7 +278,7 @@ const AuditTrailsPage = () => {
                     </AnimatePresence>
                 </div>
             </div>
-        </MainLayout>
+        </SecondLayout>
     );
 };
 

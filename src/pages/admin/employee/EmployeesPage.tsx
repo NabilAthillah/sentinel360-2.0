@@ -1,22 +1,20 @@
 import { Switch } from "@material-tailwind/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import DeleteModal from "../../../components/DeleteModal";
 import Loader from "../../../components/Loader";
-import MainLayout from "../../../layouts/MainLayout";
-import auditTrialsService from "../../../services/auditTrailsService";
+import SidebarLayout from "../../../components/SidebarLayout";
+import SecondLayout from "../../../layouts/SecondLayout";
 import employeeService from "../../../services/employeeService";
 import roleService from "../../../services/roleService";
 import { Employee } from "../../../types/employee";
 import { Role } from "../../../types/role";
-import EmployeeDocumentPivot from "./EmployeesDocumentPivot";
-import { useTranslation } from "react-i18next";
-import SidebarLayout from "../../../components/SidebarLayout";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const EmployeesPage = () => {
     const navigate = useNavigate();
@@ -28,7 +26,7 @@ const EmployeesPage = () => {
     const [sidebar, setSidebar] = useState(true);
 
     const [roles, setRoles] = useState<Role[]>([]);
-    const [employees, setEmployees] = useState<Employee[]>([]);const [deleteId, setDeleteId] = useState<string>('');
+    const [employees, setEmployees] = useState<Employee[]>([]); const [deleteId, setDeleteId] = useState<string>('');
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [switchStates, setSwitchStates] = useState<{ [key: number]: boolean }>({});
     const [reasons, setReasons] = useState<{ [key: number]: string }>({});
@@ -297,7 +295,7 @@ const EmployeesPage = () => {
             if (response.success) {
                 setEmployees(response.data);
                 const filtered = response.data.filter((emp: Employee) => emp.user.id !== currentUser.id);
-                
+
             }
         } catch (error) {
             console.error(error);
@@ -430,10 +428,9 @@ const EmployeesPage = () => {
     };
 
     return (
-        <MainLayout>
+        <SecondLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
             <div className='flex flex-col gap-6 px-6 pb-20 w-full min-h-[calc(100vh-91px)] h-full'>
-                <h2 className='text-2xl leading-9 text-white font-noto'>{t('Employees')}</h2>
                 <div className="flex flex-col flex-1 gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full">
                     <div className="w-full flex justify-between items-center gap-4 flex-wrap">
                         <div className="flex items-end gap-4 w-fit flex-wrap md:flex-nowrap">
@@ -999,7 +996,7 @@ const EmployeesPage = () => {
                     onClose={() => setUploadEmployee(false)}
                 />
             )} */}
-        </MainLayout>
+        </SecondLayout>
     );
 };
 

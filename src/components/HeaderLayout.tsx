@@ -1,41 +1,37 @@
 import "flag-icons/css/flag-icons.min.css";
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { AlignLeft } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import authService from "../services/authService";
-import { toast } from "react-toastify";
+import { User } from "../types/user";
 import Loader from "./Loader";
 
-const Header = ({
+const HeaderLayout = ({
     openSidebar,
     handleLogout,
+    title,
+    user
 }: {
     openSidebar: any;
     handleLogout: any;
+    title: string;
+    user: User
 }) => {
-    const [user, setUser] = useState<any | null>();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [langDropdownOpen, setLangDropdownOpen] = useState(false);
     const [language, setLanguage] = useState<"en" | "ms">("en");
     const { t, i18n } = useTranslation();
     const rootRef = useRef<HTMLDivElement>(null);
     const firstItemRef = useRef<HTMLAnchorElement>(null);
-    const langButtonRef = useRef<HTMLButtonElement>(null);    const navigate = useNavigate();
+    const langButtonRef = useRef<HTMLButtonElement>(null); 
+    const navigate = useNavigate();
 
     const handleLanguageChange = (lang: "en" | "ms") => {
         setLanguage(lang);
-        i18n.changeLanguage(lang); 
+        i18n.changeLanguage(lang);
         setLangDropdownOpen(false);
         i18n.changeLanguage(lang);
     };
-
-
-    useEffect(() => {
-        const data = localStorage.getItem("user");
-        setUser(data ? JSON.parse(data) : null);
-    }, []);
 
     const menuVariants: Variants = {
         hidden: { opacity: 0, y: -6, scale: 0.98 },
@@ -72,20 +68,24 @@ const Header = ({
 
     const langToFlag = (lng: "en" | "ms") => (lng === "ms" ? "my" : "sg");
 
+    console.log(user)
+
     return (
         <nav className="w-full bg-transparent p-6 flex items-center justify-between z-40 md:justify-end relative sm:gap-4">
-            <AlignLeft
-                onClick={() => openSidebar(true)}
-                color="#ffffff"
-                className="cursor-pointer md:hidden"
-            />
+            <button onClick={(e) => {navigate(-1)}} className="flex items-center gap-2">
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="cursor-pointer h-fit">
+                    <path d="M27.333 14.0003C27.333 6.64033 21.3597 0.666992 13.9997 0.666992C6.63968 0.666991 0.666343 6.64032 0.666343 14.0003C0.666343 21.3603 6.63967 27.3337 13.9997 27.3337C21.3597 27.3337 27.333 21.3603 27.333 14.0003ZM11.333 14.0003L16.6663 8.66699L16.6663 19.3337L11.333 14.0003Z" fill="#98A1B3" />
+                </svg>
+                <h2 className="font-caladea text-[32px] text-[#F9F9F9]">{title}</h2>
+            </button>
 
+            {user ? (
             <div
                 ref={rootRef}
                 className="flex items-center justify-end gap-2 relative sm:gap-4"
             >
                 {/* Language switcher */}
-                <div className="relative flex flex-col">
+                <div className="relative">
                     <button
                         type="button"
                         aria-haspopup="listbox"
@@ -167,10 +167,10 @@ const Header = ({
                             />
                         )}
                     </div>
-                    <div className="hidden sm:flex flex-col gap-[2px] text-left">
-                        <p className="text-sm text-white">{user?.name}</p>
+                    <div className="hidden sm:flex flex-col gap-[2px] text-left :">
+                        <p className="text-sm text-white">{user.name}</p>
                         <p className="text-xs leading-[21px] text-[#A3A9B6]">
-                            {user?.role?.name}
+                            {user.role.name}
                         </p>
                     </div>
 
@@ -228,8 +228,11 @@ const Header = ({
                     )}
                 </AnimatePresence>
             </div>
+            ) : (
+                <Loader primary/>
+            )}
         </nav>
     );
 };
 
-export default Header;
+export default HeaderLayout;

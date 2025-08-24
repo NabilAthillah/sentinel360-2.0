@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import MainLayout from "../../../layouts/MainLayout";
+import SecondLayout from "../../../layouts/SecondLayout";
 import SidebarLayout from "../../../components/SidebarLayout";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -104,7 +104,7 @@ const SitesPage = () => {
         if (currentPage > 1) setCurrentPage((p) => p - 1);
     };
     return (
-        <MainLayout>
+        <SecondLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
 
             <div className="flex flex-col gap-6 pl-4 pr-[156px] pb-20 w-full h-full flex-1">
@@ -591,7 +591,7 @@ const SitesPage = () => {
             </SlideOver>
 
 
-        </MainLayout >
+        </SecondLayout >
     );
 };
 

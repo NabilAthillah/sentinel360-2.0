@@ -17,7 +17,7 @@ const SidebarLayout = ({ isOpen, closeSidebar }: { isOpen: boolean; closeSidebar
                     animate={{ x: 0 }}
                     exit={{ x: "-100%" }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="sm:max-w-[264px] w-full h-screen fixed top-0 left-0 bg-[#181D26] border-r border-[#22232F] z-50 flex flex-col justify-between"
+                    className="max-w-[156px] w-full h-screen fixed top-0 left-0 bg-[#181D26] z-50 md:flex flex-col justify-between hidden"
                 >
                     {/* Logo + Close button */}
                     <div className="flex flex-col items-center py-6 relative">

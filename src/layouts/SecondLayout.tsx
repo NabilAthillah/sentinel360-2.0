@@ -1,16 +1,18 @@
 import '../i8n/i18n';
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Bounce, toast, ToastContainer } from 'react-toastify';
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
+import HeaderLayout from '../components/HeaderLayout';
 import authService from "../services/authService";
 
-const MainLayout = ({ children }: { children: React.ReactNode }) => {
+const SecondLayout = ({ children }: { children: React.ReactNode }) => {
     const [sidebar, setSidebar] = useState(false);
     const [user, setUser] = useState<any | null>(null);
     const navigate = useNavigate();
+
+    const location = useLocation();
+    const { pathname } = location;
 
     const handleLogout = () => {
         authService.logout();
@@ -73,6 +75,14 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
         }
     };
 
+    const titleHeader = () => {
+        if (pathname == '/dashboard/employees') {
+            return 'Employees';
+        } else {
+            return '';
+        }
+    }
+
     useEffect(() => {
         checkTokenAndRole();
     }, []);
@@ -92,13 +102,13 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
                 theme="dark"
                 transition={Bounce}
             />
-            <Sidebar isOpen={sidebar} closeSidebar={setSidebar} />
-            <div className="flex flex-col max-w-screen w-full pl-0 min-h-screen h-full transition-all duration-200 md:pl-[265px] ">
-                <Header openSidebar={setSidebar} handleLogout={handleLogout} />
+
+            <div className="flex flex-col max-w-screen w-full pl-0 min-h-screen h-full transition-all duration-200 md:pl-[156px] ">
+                <HeaderLayout title={titleHeader()} openSidebar={setSidebar} handleLogout={handleLogout} user={user}/>
                 {children}
             </div>
         </main>
     );
 };
 
-export default MainLayout;
+export default SecondLayout;

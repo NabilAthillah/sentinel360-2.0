@@ -108,7 +108,6 @@ const DashboardPage = () => {
 
     return (
         <MainLayout>
-            <Sidebar isOpen={sidebar} closeSidebar={setSidebar} />
             {user ? (
             <div className='flex flex-col gap-10 px-6 pb-20 w-full h-[calc(100vh-91px)]'>
                 <h2 className='text-2xl leading-9 text-white font-noto'>

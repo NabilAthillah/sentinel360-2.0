@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { SwitchCustomStyleToggleable } from "../../../components/SwitchCustomStyleToggleable";
-import MainLayout from "../../../layouts/MainLayout";
+import SecondLayout from "../../../layouts/SecondLayout";
 import { useTranslation } from "react-i18next";
 import SidebarLayout from "../../../components/SidebarLayout";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -23,7 +23,7 @@ const IncidentTypePage = () => {
     ]
 
     return (
-        <MainLayout>
+        <SecondLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
             <div className='flex flex-col gap-6 pr-[156px] pl-4 pb-20 w-full h-full flex-1'>
                 <h2 className='text-2xl leading-9 text-white font-noto'>{t('Incidents')}</h2>
@@ -254,7 +254,7 @@ const IncidentTypePage = () => {
                     </div>
                 </div>
             )}
-        </MainLayout>
+        </SecondLayout>
     )
 }
 

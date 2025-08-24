@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AnimatePresence, motion } from "framer-motion";
 import Loader from "../../../components/Loader";
-import MainLayout from "../../../layouts/MainLayout";
+import SecondLayout from "../../../layouts/SecondLayout";
 import { useTranslation } from "react-i18next";
 import SidebarLayout from "../../../components/SidebarLayout";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -330,7 +330,7 @@ const OccurencePage = () => {
   }, [site, category, searchTerm]);
 
   return (
-    <MainLayout>
+    <SecondLayout>
       <SidebarLayout isOpen={true} closeSidebar={undefined} />
       <div className='flex flex-col gap-6 pr-[156px] pl-4 pb-20 w-full h-full flex-1'>
         <h2 className='text-2xl leading-9 text-white font-noto'>{t('e-Occurrence')}</h2>
@@ -670,7 +670,7 @@ const OccurencePage = () => {
           </div>
         </form>
       </SlideOver>
-    </MainLayout>
+    </SecondLayout>
   );
 };
 
