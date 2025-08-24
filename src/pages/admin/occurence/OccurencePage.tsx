@@ -333,7 +333,6 @@ const OccurencePage = () => {
     <SecondLayout>
       <SidebarLayout isOpen={true} closeSidebar={undefined} />
       <div className='flex flex-col gap-6 pr-[156px] pl-4 pb-20 w-full h-full flex-1'>
-        <h2 className='text-2xl leading-9 text-white font-noto'>{t('e-Occurrence')}</h2>
         <div className="flex flex-col gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1">
           <div className="w-full flex flex-col gap-4">
             <div className="w-full flex justify-between items-center gap-4 flex-wrap lg:flex-nowrap">

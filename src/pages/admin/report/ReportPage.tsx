@@ -21,8 +21,6 @@ const ReportPage = () => {
         <SecondLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
             <div className="flex flex-col gap-6 pr-[156px] pl-4 pb-20 w-full h-full flex-1 pr-28">
-                <h2 className="text-2xl leading-9 text-white font-noto">{t('Report')}</h2>
-
                 <div className="flex flex-col pr-12 gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1 relative">
 
                     <div className="flex items-end gap-4 w-fit flex-wrap md:flex-nowrap">

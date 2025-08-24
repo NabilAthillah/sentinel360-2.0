@@ -68,15 +68,13 @@ const HeaderLayout = ({
 
     const langToFlag = (lng: "en" | "ms") => (lng === "ms" ? "my" : "sg");
 
-    console.log(user)
-
     return (
-        <nav className="w-full bg-transparent p-6 flex items-center justify-between z-40 md:justify-end relative sm:gap-4">
+        <nav className="w-full bg-transparent p-6 flex items-center justify-between z-40 relative sm:gap-4">
             <button onClick={(e) => {navigate(-1)}} className="flex items-center gap-2">
                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="cursor-pointer h-fit">
                     <path d="M27.333 14.0003C27.333 6.64033 21.3597 0.666992 13.9997 0.666992C6.63968 0.666991 0.666343 6.64032 0.666343 14.0003C0.666343 21.3603 6.63967 27.3337 13.9997 27.3337C21.3597 27.3337 27.333 21.3603 27.333 14.0003ZM11.333 14.0003L16.6663 8.66699L16.6663 19.3337L11.333 14.0003Z" fill="#98A1B3" />
                 </svg>
-                <h2 className="font-caladea text-[32px] text-[#F9F9F9]">{title}</h2>
+                <h2 className="font-caladea text-[32px] text-[#F9F9F9] w-full">{title}</h2>
             </button>
 
             {user ? (

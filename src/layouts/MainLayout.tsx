@@ -8,7 +8,7 @@ import Sidebar from "../components/Sidebar";
 import authService from "../services/authService";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
-    const [sidebar, setSidebar] = useState(false);
+    const [sidebar, setSidebar] = useState(true);
     const [user, setUser] = useState<any | null>(null);
     const navigate = useNavigate();
 

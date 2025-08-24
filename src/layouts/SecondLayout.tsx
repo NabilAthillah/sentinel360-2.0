@@ -78,6 +78,20 @@ const SecondLayout = ({ children }: { children: React.ReactNode }) => {
     const titleHeader = () => {
         if (pathname == '/dashboard/employees') {
             return 'Employees';
+        } else if (pathname == '/dashboard/attendances') {
+            return 'Attendances';
+        } else if (pathname == '/dashboard/e-occurrences') {
+            return 'E-Occurrences';
+        } else if (pathname == '/dashboard/incidents') {
+            return 'Incidents';
+        } else if (pathname == '/dashboard/sites') {
+            return 'Sites';
+        } else if (pathname == '/dashboard/reports') {
+            return 'Reports';
+        } else if (pathname == '/dashboard/guard-tours') {
+            return 'Guard Tours';
+        } else if (pathname == '/dashboard/audit-trails') {
+            return 'Audit Trails';
         } else {
             return '';
         }
@@ -103,8 +117,8 @@ const SecondLayout = ({ children }: { children: React.ReactNode }) => {
                 transition={Bounce}
             />
 
-            <div className="flex flex-col max-w-screen w-full pl-0 min-h-screen h-full transition-all duration-200 md:pl-[156px] ">
-                <HeaderLayout title={titleHeader()} openSidebar={setSidebar} handleLogout={handleLogout} user={user}/>
+            <div className="flex flex-col max-w-screen w-full pl-0 min-h-screen h-full transition-all duration-200 2xl:pl-[156px] ">
+                <HeaderLayout title={titleHeader()} openSidebar={setSidebar} handleLogout={handleLogout} user={user} />
                 {children}
             </div>
         </main>

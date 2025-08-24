@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import SecondLayout from "../../../layouts/SecondLayout";
-import Loader from "../../../components/Loader";
-import { useTranslation } from "react-i18next";
-import { motion, AnimatePresence } from "framer-motion";
-import SidebarLayout from "../../../components/SidebarLayout";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Loader from "../../../components/Loader";
+import SidebarLayout from "../../../components/SidebarLayout";
+import SecondLayout from "../../../layouts/SecondLayout";
 
 // Dummy data
 const categories = ["login", "update", "delete", "create"];
@@ -87,11 +87,7 @@ const AuditTrailsPage = () => {
     return (
         <SecondLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
-            <div className="flex flex-col gap-6 pl-4 pr-[156px] pb-20 w-full min-h-[calc(100vh-91px)] h-full">
-                <h2 className="text-2xl leading-9 text-white font-noto">
-                    {t("Audit Trails")}
-                </h2>
-
+            <div className="flex flex-col gap-6 pl-4 pr-4 pb-20 w-full min-h-[calc(100vh-91px)] h-full 2xl:pr-[156px]">
                 <div className="flex flex-col gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1 relative">
 
                     <div className="flex flex-wrap gap-4">

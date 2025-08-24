@@ -108,7 +108,6 @@ const GuardTour = () => {
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
 
             <div className="flex flex-col gap-6 px-[156px] pb-20 w-full h-full flex-1">
-                <h2 className="text-2xl leading-9 text-white font-noto">{t("Guard Tour")}</h2>
                 <div className="flex flex-col gap-6 bg-[#252C38] p-6 rounded-lg w-full h-full flex-1">
                     <div className="flex justify-between items-center flex-wrap gap-4">
                         <div className="w-full md:w-[400px] flex items-center bg-[#222834] border-b border-[#98A1B3] rounded-t-md">
