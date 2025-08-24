@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 import MainLayout from "../../../../layouts/MainLayout";
 import Navbar from "../../../../components/Navbar";
@@ -6,44 +6,90 @@ import { useTranslation } from "react-i18next";
 import Loader from "../../../../components/Loader";
 import PhoneInput from "react-phone-input-2";
 import Sidebar from "../../../../components/Sidebar";
+import clientInfoService from "../../../../services/clientInfoService";
+import { Client } from "../../../../types/client";
 
 const ClientInfoPage = () => {
     const { t } = useTranslation();
-    const [loading, setLoading] = useState<boolean>(false);
-    const [client] = useState({
-        id: "1",
-        name: "Sentinel ",
-        reg_no: "REG123456",
-        address: "123 Street, Singapore 123456",
-        contact: "+6512345678",
-        website: "https://example.com",
-        email: "info@example.com",
-        logo: "",
-        chart: "",
-    });
+    const token = localStorage.getItem("token");
 
-    const [name, setName] = useState(client.name);
-    const [reg, setReg] = useState(client.reg_no);
-    const [address, setAddress] = useState(client.address);
-    const [contact, setContact] = useState(client.contact);
-    const [website, setWebsite] = useState(client.website);
-    const [email, setEmail] = useState(client.email);
+    const [loading, setLoading] = useState(false);
+    const [saving, setSaving] = useState(false);
+
+    const [id, setId] = useState<string | null>(null);
+    const [client, setClient] = useState<Client | null>(null);
+
+    const [name, setName] = useState("");
+    const [reg, setReg] = useState("");
+    const [address, setAddress] = useState("");
+    const [contact, setContact] = useState("");
+    const [website, setWebsite] = useState("");
+    const [email, setEmail] = useState("");
 
     const [imageName, setImageName] = useState<string | null>(null);
     const [chartName, setChartName] = useState<string | null>(null);
     const imageInputRef = useRef<HTMLInputElement | null>(null);
     const chartInputRef = useRef<HTMLInputElement | null>(null);
 
-    const [saving, setSaving] = useState(false);
+    // Load data dari API
+    const loadData = async () => {
+        try {
+            setLoading(true);
+            const res = await clientInfoService.getData(token);
 
+            if (res && res.data) {
+                const data = res.data;
+
+                setClient(data);
+                setId(data.id);
+                setName(data.name || "");
+                setReg(data.reg_no || "");
+                setAddress(data.address || "");
+                setContact(data.contact || "");
+                setWebsite(data.website || "");
+                setEmail(data.email || "");
+            }
+        } catch (err: any) {
+            toast.error(err.message || "Failed to load client info");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    // Submit update
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        setSaving(true);
-        setTimeout(() => {
-            toast.success("Client Info Updated (dummy)");
+        if (!id || !token) {
+            toast.error("Missing ID or token!");
+            return;
+        }
+
+        try {
+            setSaving(true);
+
+            const payload = {
+                name,
+                reg_no: reg,
+                address,
+                contact,
+                website,
+                email,
+            };
+
+            await clientInfoService.updateData(payload, id);
+            toast.success("Client Info updated successfully");
+            loadData();
+        } catch (err: any) {
+            toast.error(err.message || "Failed to update client info");
+        } finally {
             setSaving(false);
-        }, 1000);
+        }
     };
+
 
     return (
         <MainLayout>
@@ -55,26 +101,28 @@ const ClientInfoPage = () => {
                     <div className="flex gap-6 flex-wrap xl:flex-nowrap">
                         <div className="flex flex-col w-full gap-6 xl:max-w-80">
                             <div className="flex flex-col gap-4 bg-[#252C38] xl:max-w-80 w-full h-fit p-4 rounded-lg">
-                                <p className="font-semibold text-base leading-[20px] text-[#EFBF04]">{client.name}</p>
+                                <p className="font-semibold text-base leading-[20px] text-[#EFBF04]">
+                                    {client?.name || "-"}
+                                </p>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-[#98A1B3]">Reg. No</label>
-                                    <p className="text-base text-[#F4F7FF]">{client.reg_no}</p>
+                                    <p className="text-base text-[#F4F7FF]">{client?.reg_no || "-"}</p>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-[#98A1B3]">Address</label>
-                                    <p className="text-base text-[#F4F7FF]">{client.address}</p>
+                                    <p className="text-base text-[#F4F7FF]">{client?.address || "-"}</p>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-[#98A1B3]">Contact</label>
-                                    <p className="text-base text-[#F4F7FF]">{client.contact}</p>
+                                    <p className="text-base text-[#F4F7FF]">{client?.contact || "-"}</p>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-[#98A1B3]">Website</label>
-                                    <p className="text-base text-[#F4F7FF]">{client.website}</p>
+                                    <p className="text-base text-[#F4F7FF]">{client?.website || "-"}</p>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-[#98A1B3]">Email</label>
-                                    <p className="text-base text-[#F4F7FF]">{client.email}</p>
+                                    <p className="text-base text-[#F4F7FF]">{client?.email || "-"}</p>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs leading-[21px] text-[#98A1B3]">
@@ -83,7 +131,7 @@ const ClientInfoPage = () => {
                                 </div>
                             </div>
 
-
+                            {/* Stats dummy */}
                             <div className="grid grid-cols-1 justify-between gap-x-2 gap-y-4 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-3">
                                 {["Sites", "Employees", "Asigned", "Unasigned", "On leave"].map(
                                     (label, i) => (
@@ -106,6 +154,8 @@ const ClientInfoPage = () => {
                                 )}
                             </div>
                         </div>
+
+                        {/* Form Update */}
                         <form
                             onSubmit={handleSubmit}
                             className="w-full p-6 h-full rounded-lg bg-[#252C38] flex flex-col gap-8"
@@ -121,6 +171,7 @@ const ClientInfoPage = () => {
                                             onChange={(e) => setName(e.target.value)}
                                         />
                                     </div>
+
                                     <div className="flex flex-col max-w-[520px] w-full px-4 pt-2 py-2 rounded bg-[#222834] border-b border-b-[#98A1B3]">
                                         <label className="text-xs text-[#98A1B3]">Reg No.</label>
                                         <input
@@ -130,6 +181,7 @@ const ClientInfoPage = () => {
                                             onChange={(e) => setReg(e.target.value)}
                                         />
                                     </div>
+
                                     <div className="flex flex-col max-w-[520px] w-full px-4 pt-2 py-2 rounded bg-[#222834] border-b border-b-[#98A1B3]">
                                         <label className="text-xs text-[#98A1B3]">Address</label>
                                         <input
@@ -177,6 +229,7 @@ const ClientInfoPage = () => {
                                         />
                                     </div>
 
+                                    {/* Uploads */}
                                     <div className="flex flex-col gap-3">
                                         <label className="text-xs leading-[21px] text-[#98A1B3]">
                                             Site image <span className="text-xs">(Maximum image size is 5MB!)</span>{" "}
@@ -212,7 +265,8 @@ const ClientInfoPage = () => {
                                             <span className="text-red-500 text-[10px]">
                                                 * Do not upload if you don't want to make changes
                                             </span>
-                                        </label><button
+                                        </label>
+                                        <button
                                             type="button"
                                             onClick={() => chartInputRef.current?.click()}
                                             className="font-medium text-sm leading-[21px] text-[#EFBF04] px-5 py-2 border-[1px] border-[#EFBF04] rounded-full cursor-pointer w-fit transition-all hover:bg-[#EFBF04] hover:text-[#252C38]"
@@ -238,7 +292,7 @@ const ClientInfoPage = () => {
                             <div className="flex gap-4 flex-wrap">
                                 <button
                                     type="submit"
-                                    disabled={saving}
+                                    // disabled={saving}
                                     className="font-medium text-base px-12 py-3 rounded-full flex items-center gap-2 bg-[#EFBF04] text-[#181D26] border border-[#EFBF04] hover:bg-[#181D26] hover:text-[#EFBF04]"
                                 >
                                     {saving ? <Loader primary={true} /> : "Save"}

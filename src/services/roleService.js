@@ -1,16 +1,9 @@
 import api from "../utils/api";
 
 const roleService = {
-    addRole: async (name, token, permissions) => {
+    addRole: async (payload) => {
         try {
-            const response = await api.post('/roles', {
-                name: name,
-                permissions
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
+            const response = await api.post('master-settings/roles', payload)
             if (response.data) {
                 return response.data;
             }
@@ -21,7 +14,7 @@ const roleService = {
 
     getAllRoles: async (token) => {
         try {
-            const response = await api.get('/roles', {
+            const response = await api.get('master-settings/roles', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -35,16 +28,9 @@ const roleService = {
         }
     },
 
-    updateRole: async (id, name, token, permissions) => {
+    updateRole: async (id, payload) => {
         try {
-            const response = await api.put(`/roles/${id}`, {
-                name: name,
-                permissions
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
+            const response = await api.put(`master-settings/roles/${id}`, payload);
 
             if (response.data) {
                 return response.data;

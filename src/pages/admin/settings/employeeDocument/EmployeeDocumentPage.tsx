@@ -100,18 +100,6 @@ const EmployeeDocumentPage = () => {
         }
     };
 
-    // // Delete
-    // const handleDelete = async (id: string) => {
-    //     if (!confirm("Are you sure to delete this document?")) return;
-    //     try {
-    //         await employeeDocumentService.deleteEmployeeDocument(token, id);
-    //         toast.success("Document deleted");
-    //         loadDocuments();
-    //     } catch (err: any) {
-    //         toast.error(err.message || "Failed to delete document");
-    //     }
-    // };
-
     return (
         <MainLayout>
             <Sidebar isOpen={true} closeSidebar={undefined} />
@@ -174,8 +162,10 @@ const EmployeeDocumentPage = () => {
                                                 <div className="flex items-center gap-4 w-40">
                                                     <Switch
                                                         checked={doc.status === "active"}
-                                                        onChange={(e) => handleToggle(doc.id, e.target.checked ? "active" : "inactive")}
-                                                        color="green" onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} crossOrigin={undefined}                                                    />
+                                                        onChange={(e) => 
+                                                            handleToggle(doc.id, e.target.checked ? "active" : "inactive")
+                                                        }
+                                                        color="blue" onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} crossOrigin={undefined} />
                                                     <span
                                                         className={`font-medium text-sm capitalize ${doc.status === "active"
                                                             ? "text-[#19CE74]"
@@ -184,6 +174,28 @@ const EmployeeDocumentPage = () => {
                                                     >
                                                         {doc.status}
                                                     </span>
+                                                </div>
+                                            </td>
+                                            <td className="text-center py-3">
+                                                <div className="flex justify-center gap-3">
+                                                    <button
+                                                        onClick={() => {
+                                                            setEditEmploy(true);
+                                                            setEditData(doc);
+                                                            setName(doc.name);
+                                                        }}
+                                                        className="p-2 rounded-full bg-white hover:bg-gray-200 transition duration-200 group shadow"
+                                                        title="Edit Document"
+                                                    >
+                                                        <svg
+                                                            className="w-6 h-6 text-gray-800 group-hover:text-gray-900 group-hover:scale-110 transition-transform"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            fill="currentColor"
+                                                            viewBox="0 0 28 28"
+                                                        >
+                                                            <path d="M3.5,20.1249V24.5H7.875L20.7783,11.5967L16.4033,7.2217L3.5,20.1249ZM24.1617,8.2133C24.6166,7.7593,24.6166,7.0223,24.1617,6.5683L21.4317,3.8383C20.9777,3.3834,20.2406,3.3834,19.7867,3.8383L17.6517,5.9733L22.0267,10.3483L24.1617,8.2133Z" />
+                                                        </svg>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>

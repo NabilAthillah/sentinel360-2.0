@@ -8,6 +8,7 @@ import MainLayout from "../../../../layouts/MainLayout";
 import { useTranslation } from "react-i18next";
 import Sidebar from "../../../../components/Sidebar";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import IncidentTypesService from "../../../../services/incidentTypeService";
 
 type IncidentType = {
     id: string;
@@ -20,16 +21,13 @@ const IncidentPageMaster = () => {
     const [editIncident, setEditIncident] = useState(false);
     const [editData, setEditData] = useState<IncidentType | null>(null);
     const [loading, setLoading] = useState(false);
-    const [datas, setDatas] = useState<IncidentType[]>([
-        { id: "1", name: "Fire Drill", status: "active" },
-        { id: "2", name: "Workplace Injury", status: "inactive" },
-        { id: "3", name: "Equipment Failure", status: "active" },
-    ]);
+    const [datas, setDatas] = useState<IncidentType[]>([]);
     const [name, setName] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
     const { t } = useTranslation();
+    const token = localStorage.getItem("token");
 
     const filteredData = datas.filter((doc) =>
         doc.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -41,61 +39,70 @@ const IncidentPageMaster = () => {
         currentPage * itemsPerPage
     );
 
-    const [switchStates, setSwitchStates] = useState<Record<string, boolean>>({
-        "1": true,
-        "2": false,
-        "3": true,
-    });
-
-    const goToNextPage = () => {
-        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-    };
-    const goToPrevPage = () => {
-        if (currentPage > 1) setCurrentPage(currentPage - 1);
-    };
-
-    const handleToggle = (id: string) => {
-        setSwitchStates((prev) => ({
-            ...prev,
-            [id]: !prev[id],
-        }));
-        toast.success("Status toggled (dummy)");
+    // 🔹 Ambil data dari API
+    const loadData = async () => {
+        try {
+            setLoading(true);
+            const response = await IncidentTypesService.getIncidentTypes(token);
+            setDatas(response.data || []);
+        } catch (error: any) {
+            toast.error(error.message || "Failed to load incidents");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleSubmit = (e: React.SyntheticEvent) => {
+    // 🔹 Tambah incident
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        setLoading(true);
-        setTimeout(() => {
-            const newIncident: IncidentType = {
-                id: String(datas.length + 1),
-                name,
-                status: "active",
-            };
-            setDatas((prev) => [...prev, newIncident]);
+        try {
+            setLoading(true);
+            await IncidentTypesService.addIncidentTypes(token, name);
+            toast.success("Incident added successfully");
             setName("");
             setAddIncident(false);
+            loadData();
+        } catch (error: any) {
+            toast.error(error.message || "Failed to add incident");
+        } finally {
             setLoading(false);
-            toast.success("Incident added (dummy)");
-        }, 800);
+        }
     };
 
-    const handleEdit = (e: React.SyntheticEvent) => {
+    // 🔹 Edit incident
+    const handleEdit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         if (!editData) return;
-        setLoading(true);
-        setTimeout(() => {
-            setDatas((prev) =>
-                prev.map((doc) =>
-                    doc.id === editData.id ? { ...doc, name } : doc
-                )
-            );
+        try {
+            setLoading(true);
+            await IncidentTypesService.editIncidentTypes(token, editData.id, name);
+            toast.success("Incident updated successfully");
             setName("");
             setEditIncident(false);
             setEditData(null);
+            loadData();
+        } catch (error: any) {
+            toast.error(error.message || "Failed to update incident");
+        } finally {
             setLoading(false);
-            toast.success("Incident updated (dummy)");
-        }, 800);
+        }
     };
+
+    // 🔹 Toggle status
+    const handleToggle = async (id: string, currentStatus: "active" | "inactive") => {
+        const newStatus = currentStatus === "active" ? "inactive" : "active";
+        try {
+            await IncidentTypesService.editIncidentTypesStatus(token, id, newStatus);
+            toast.success("Status updated successfully");
+            loadData();
+        } catch (error: any) {
+            toast.error(error.message || "Failed to update status");
+        }
+    };
+
+    useEffect(() => {
+        loadData();
+    }, []);
 
     useEffect(() => {
         if (editData && editIncident) {
@@ -145,83 +152,82 @@ const IncidentPageMaster = () => {
                                 <table className="min-w-[700px] w-full">
                                     <thead>
                                         <tr>
-                                            <th className="font-semibold text-[#98A1B3] text-start">
-                                                {t("S/NO")}
-                                            </th>
-                                            <th className="font-semibold text-[#98A1B3] text-start">
-                                                {t("Incident")}
-                                            </th>
-                                            <th className="font-semibold text-[#98A1B3] text-start">
-                                                {t("Status")}
-                                            </th>
-                                            <th className="font-semibold text-[#98A1B3] text-center">
-                                                {t("Action")}
-                                            </th>
+                                            <th className="font-semibold text-[#98A1B3] text-start">{t("S/NO")}</th>
+                                            <th className="font-semibold text-[#98A1B3] text-start">{t("Incident")}</th>
+                                            <th className="font-semibold text-[#98A1B3] text-start">{t("Status")}</th>
+                                            <th className="font-semibold text-[#98A1B3] text-center">{t("Action")}</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        {paginatedData.length > 0 ? (
-                                            paginatedData.map((incident, index) => (
-                                                <tr key={incident.id}>
-                                                    <td className="text-[#F4F7FF] pt-6 pb-3">
-                                                        {(currentPage - 1) * itemsPerPage + index + 1}
-                                                    </td>
-                                                    <td className="text-[#F4F7FF] pt-6 pb-3">
-                                                        {incident.name}
-                                                    </td>
-                                                    <td className="text-[#F4F7FF] pt-6 pb-3">
-                                                        <div className="flex items-center gap-4 w-40">
-
-                                                            <p
-                                                                className={`font-medium text-sm capitalize ${switchStates[incident.id]
-                                                                    ? "text-[#19CE74]"
-                                                                    : "text-[#FF7E6A]"
-                                                                    }`}
-                                                            >
-                                                                {switchStates[incident.id]
-                                                                    ? "active"
-                                                                    : "inactive"}
-                                                            </p>
-                                                        </div>
-                                                    </td>
-                                                    <td className="pt-6 pb-3">
-                                                        <div className="flex gap-6 items-center justify-center">
-                                                            <svg
-                                                                onClick={() => {
-                                                                    setEditIncident(true);
-                                                                    setEditData(incident);
-                                                                }}
-                                                                className="cursor-pointer"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none"
-                                                                version="1.1"
-                                                                width="28"
-                                                                height="28"
-                                                                viewBox="0 0 28 28"
-                                                            >
-                                                                <path
-                                                                    d="M3.5,20.1249V24.5H7.875L20.7783,11.5967L16.4033,7.2217L3.5,20.1249ZM24.1617,8.2133C24.6166,7.7593,24.6166,7.0223,24.1617,6.5683L21.4317,3.8383C20.9777,3.3834,20.2406,3.3834,19.7867,3.8383L17.6517,5.9733L22.0267,10.3483L24.1617,8.2133Z"
-                                                                    fill="#F4F7FF"
-                                                                />
-                                                            </svg>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        ) : (
+                                    {loading ? (
+                                        <tbody>
                                             <tr>
-                                                <td
-                                                    colSpan={4}
-                                                    className="text-center text-white py-4"
-                                                >
-                                                    No incidents found.
+                                                <td colSpan={4} className="py-10">
+                                                    <div className="w-full flex justify-center">
+                                                        <Loader primary />
+                                                    </div>
                                                 </td>
                                             </tr>
-                                        )}
-                                    </tbody>
+                                        </tbody>
+                                    ) : (
+                                        <tbody>
+                                            {paginatedData.length > 0 ? (
+                                                paginatedData.map((incident, index) => (
+                                                    <tr key={incident.id}>
+                                                        <td className="text-[#F4F7FF] pt-6 pb-3">
+                                                            {(currentPage - 1) * itemsPerPage + index + 1}
+                                                        </td>
+                                                        <td className="text-[#F4F7FF] pt-6 pb-3">{incident.name}</td>
+                                                        <td className="text-[#F4F7FF] pt-6 pb-3">
+                                                            <div className="flex items-center gap-4 w-40">
+                                                                <Switch
+                                                                    checked={incident.status === "active"}
+                                                                    onChange={() => handleToggle(incident.id, incident.status)}
+                                                                    color="blue" crossOrigin={undefined} onResize={undefined} onResizeCapture={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
+                                                                <p
+                                                                    className={`font-medium text-sm capitalize ${incident.status === "active"
+                                                                        ? "text-[#19CE74]"
+                                                                        : "text-[#FF7E6A]"
+                                                                        }`}
+                                                                >
+                                                                    {incident.status}
+                                                                </p>
+                                                            </div>
+                                                        </td>
+                                                        <td className="pt-6 pb-3">
+                                                            <div className="flex gap-6 items-center justify-center">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setEditIncident(true);
+                                                                        setEditData(incident);
+                                                                        setName(incident.name);
+                                                                    }}
+                                                                    className="p-2 rounded-full bg-white hover:bg-gray-200 transition duration-200 group shadow"
+                                                                    title="Edit Document"
+                                                                >
+                                                                    <svg
+                                                                        className="w-6 h-6 text-gray-800 group-hover:text-gray-900 group-hover:scale-110 transition-transform"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="currentColor"
+                                                                        viewBox="0 0 28 28"
+                                                                    >
+                                                                        <path d="M3.5,20.1249V24.5H7.875L20.7783,11.5967L16.4033,7.2217L3.5,20.1249ZM24.1617,8.2133C24.6166,7.7593,24.6166,7.0223,24.1617,6.5683L21.4317,3.8383C20.9777,3.3834,20.2406,3.3834,19.7867,3.8383L17.6517,5.9733L22.0267,10.3483L24.1617,8.2133Z" />
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan={4} className="text-center text-white py-4">
+                                                        No incidents found.
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </tbody>)}
                                 </table>
                             </div>
-                            <div className="absolute bottom-0 right-0 flex gap-2">
+                            {/* <div className="absolute bottom-0 right-0 flex gap-2">
                                 <button
                                     onClick={goToPrevPage}
                                     disabled={currentPage === 1}
@@ -241,7 +247,7 @@ const IncidentPageMaster = () => {
                                     {t('Next')}
                                     <ArrowRight size={14} />
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

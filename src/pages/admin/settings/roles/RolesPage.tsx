@@ -6,6 +6,9 @@ import Loader from "../../../../components/Loader";
 import Sidebar from "../../../../components/Sidebar";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import roleService from "../../../../services/roleService";
+import { toast } from "react-toastify";
+import permissionService from "../../../../services/permissionService";
 
 type Role = {
     id: string;
@@ -31,7 +34,7 @@ const RolesPage = () => {
     const [name, setName] = useState("");
     const [loading, setLoading] = useState(false);
     const [roles, setRoles] = useState<Role[]>([]);
-    const [editedRole, setEditedRole] = useState<Role>();
+    const [editedRole, setEditedRole] = useState<Role | null>(null);
 
     const permissionsFlat = Object.values(permissions).flat();
 
@@ -39,7 +42,7 @@ const RolesPage = () => {
     const [filteredRoles, setFilteredRoles] = useState<Role[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = (searchTerm ? filteredRoles : roles).slice(
@@ -50,47 +53,37 @@ const RolesPage = () => {
     const totalItems = searchTerm ? filteredRoles.length : roles.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    // 🔹 Dummy data
+    const token = localStorage.getItem("token");
+
+    // Load roles from API
+    const loadRoles = async () => {
+        try {
+            setLoading(true);
+            const res = await roleService.getAllRoles(token);
+            setRoles(res.data || []);
+        } catch (err: any) {
+            toast.error(err.message || "Failed to fetch roles");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const loadPermissions = async () => {
+        try {
+            const response = await permissionService.getAllPermissions();
+
+            if (response.success) {
+                setPermissions(response.data);
+            }
+        } catch (error: any) {
+            toast.error(error.message);
+        }
+    }
+
     useEffect(() => {
-        setPermissions({
-            "User Management": [
-                { id: "1", name: "add_user", category: "User Management" },
-                { id: "2", name: "edit_user", category: "User Management" },
-                { id: "3", name: "delete_user", category: "User Management" },
-            ],
-            "Role Management": [
-                { id: "4", name: "add_role", category: "Role Management" },
-                { id: "5", name: "edit_role", category: "Role Management" },
-                { id: "6", name: "delete_role", category: "Role Management" },
-            ],
-        });
-
-        setRoles([
-            {
-                id: "r1",
-                name: "Admin",
-                permissions: [
-                    { id: "1", name: "add_user", category: "User Management" },
-                    { id: "4", name: "add_role", category: "Role Management" },
-                ],
-            },
-            {
-                id: "r2",
-                name: "Editor",
-                permissions: [
-                    { id: "2", name: "edit_user", category: "User Management" },
-                ],
-            },
-        ]);
+        loadRoles();
+        loadPermissions();
     }, []);
-
-    const handlePrev = () => {
-        if (currentPage > 1) setCurrentPage(currentPage - 1);
-    };
-
-    const handleNext = () => {
-        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-    };
 
     const togglePermission = (id: string) => {
         setSelectedPermissions((prev) =>
@@ -100,36 +93,57 @@ const RolesPage = () => {
 
     const toggleEditPermission = (id: string) => {
         if (!editedRole) return;
+        const perm = permissionsFlat.find((p) => p.id === id);
+        if (!perm) return;
 
         const updatedPermissions = editedRole.permissions.some((p) => p.id === id)
             ? editedRole.permissions.filter((p) => p.id !== id)
-            : [...editedRole.permissions, permissionsFlat.find((p) => p.id === id)!];
+            : [...editedRole.permissions, perm];
 
         setEditedRole({ ...editedRole, permissions: updatedPermissions });
     };
 
-    const handleSubmit = (e: React.SyntheticEvent) => {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         if (!name) return;
-        const newRole: Role = {
-            id: Math.random().toString(),
-            name,
-            permissions: permissionsFlat.filter((p) =>
-                selectedPermissions.includes(p.id)
-            ),
-        };
-        setRoles([...roles, newRole]);
-        setAddRole(false);
-        setName("");
-        setSelectedPermissions([]);
+
+        try {
+            setLoading(true);
+            const payload = {
+                name,
+                permission_ids: selectedPermissions,
+            };
+            await roleService.addRole(payload);
+            toast.success("Role added successfully");
+            loadRoles();
+            setAddRole(false);
+            setName("");
+            setSelectedPermissions([]);
+        } catch (err: any) {
+            toast.error(err.message || "Failed to add role");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const handleEditRole = () => {
+    const handleEditRole = async () => {
         if (!editedRole) return;
-        setRoles((prev) =>
-            prev.map((r) => (r.id === editedRole.id ? editedRole : r))
-        );
-        setEditRole(false);
+        try {
+            setLoading(true);
+            const payload = {
+                name: editedRole.name,
+                permission_ids: editedRole.permissions.map((p) => p.id),
+            };
+            await roleService.updateRole(editedRole.id, payload);
+            toast.success("Role updated successfully");
+            loadRoles();
+            setEditRole(false);
+            setEditedRole(null);
+        } catch (err: any) {
+            toast.error(err.message || "Failed to update role");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleSearch = () => {
@@ -164,7 +178,7 @@ const RolesPage = () => {
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     onKeyDown={(e) => {
-                                        if (e.key === 'Enter') handleSearch();
+                                        if (e.key === "Enter") handleSearch();
                                     }}
                                 />
                                 <button
@@ -177,7 +191,12 @@ const RolesPage = () => {
                                 </button>
                             </div>
                             <div className="w-[200px]">
-                                <button onClick={() => setAddRole(true)} className="font-medium text-base min-w-[200px] text-[#181d26] px-[46.5px] py-3 border-[1px] border-[#EFBF04] bg-[#EFBF04] rounded-full hover:bg-[#181d26] hover:text-[#EFBF04] transition-all">{t('Add role')}</button>
+                                <button
+                                    onClick={() => setAddRole(true)}
+                                    className="font-medium text-base min-w-[200px] text-[#181d26] px-[46.5px] py-3 border-[1px] border-[#EFBF04] bg-[#EFBF04] rounded-full hover:bg-[#181d26] hover:text-[#EFBF04] transition-all"
+                                >
+                                    {t("Add role")}
+                                </button>
                             </div>
                         </div>
 
@@ -187,9 +206,9 @@ const RolesPage = () => {
                                 <table className="min-w-[700px] w-full">
                                     <thead>
                                         <tr>
-                                            <th className="font-semibold text-[#98A1B3] text-start">{t('S/NO')}</th>
-                                            <th className="font-semibold text-[#98A1B3] text-start">{t('Role')}</th>
-                                            <th className="font-semibold text-[#98A1B3] text-center">{t('Actions')}</th>
+                                            <th className="font-semibold text-[#98A1B3] text-start">{t("S/NO")}</th>
+                                            <th className="font-semibold text-[#98A1B3] text-start">{t("Role")}</th>
+                                            <th className="font-semibold text-[#98A1B3] text-center">{t("Actions")}</th>
                                         </tr>
                                     </thead>
                                     {loading ? (
@@ -206,16 +225,19 @@ const RolesPage = () => {
                                         <tbody>
                                             {currentItems.map((data, index) => (
                                                 <tr key={data.id}>
-                                                    <td className="text-[#F4F7FF] pt-6 pb-3">
-                                                        {indexOfFirstItem + index + 1}
-                                                    </td>
-                                                    <td className="text-[#F4F7FF] pt-6 pb-3">
-                                                        {data.name}
-                                                    </td>
+                                                    <td className="text-[#F4F7FF] pt-6 pb-3">{indexOfFirstItem + index + 1}</td>
+                                                    <td className="text-[#F4F7FF] pt-6 pb-3">{data.name}</td>
                                                     <td className="pt-6 pb-3">
                                                         <div className="flex gap-6 items-center justify-center">
-                                                            <svg onClick={() => { setEditedRole(data); setEditRole(true) }} className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" version="1.1" width="28" height="28" viewBox="0 0 28 28"><defs><clipPath id="master_svg0_247_14308"><rect x="0" y="0" width="28" height="28" rx="0" /></clipPath></defs><g><g clip-path="url(#master_svg0_247_14308)"><g><path d="M3.5,20.124948752212525L3.5,24.499948752212525L7.875,24.499948752212525L20.7783,11.596668752212524L16.4033,7.2216687522125245L3.5,20.124948752212525ZM24.1617,8.213328752212524C24.6166,7.759348752212524,24.6166,7.0223187522125246,24.1617,6.568328752212524L21.4317,3.8383337522125243C20.9777,3.3834207522125244,20.2406,3.3834207522125244,19.7867,3.8383337522125243L17.651699999999998,5.973328752212524L22.0267,10.348338752212523L24.1617,8.213328752212524Z" fill="#F4F7FF" fill-opacity="1" /></g></g></g></svg>
-                                                            {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" version="1.1" width="28" height="28" viewBox="0 0 28 28"><defs><clipPath id="master_svg0_247_14302"><rect x="0" y="0" width="28" height="28" rx="0" /></clipPath></defs><g><g clip-path="url(#master_svg0_247_14302)"><g><path d="M6.9996778125,24.5L20.9997078125,24.5L20.9997078125,8.16667L6.9996778125,8.16667L6.9996778125,24.5ZM22.1663078125,4.66667L18.0830078125,4.66667L16.9163078125,3.5L11.0830078125,3.5L9.9163378125,4.66667L5.8330078125,4.66667L5.8330078125,7L22.1663078125,7L22.1663078125,4.66667Z" fill="#F4F7FF" fill-opacity="1" /></g></g></g></svg> */}
+                                                            <button
+                                                                onClick={() => {
+                                                                    setEditedRole(data);
+                                                                    setEditRole(true);
+                                                                }}
+                                                                className="text-white hover:text-blue-500"
+                                                            >
+                                                                <svg onClick={() => { setEditedRole(data); setEditRole(true) }} className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" version="1.1" width="28" height="28" viewBox="0 0 28 28"><defs><clipPath id="master_svg0_247_14308"><rect x="0" y="0" width="28" height="28" rx="0" /></clipPath></defs><g><g clip-path="url(#master_svg0_247_14308)"><g><path d="M3.5,20.124948752212525L3.5,24.499948752212525L7.875,24.499948752212525L20.7783,11.596668752212524L16.4033,7.2216687522125245L3.5,20.124948752212525ZM24.1617,8.213328752212524C24.6166,7.759348752212524,24.6166,7.0223187522125246,24.1617,6.568328752212524L21.4317,3.8383337522125243C20.9777,3.3834207522125244,20.2406,3.3834207522125244,19.7867,3.8383337522125243L17.651699999999998,5.973328752212524L22.0267,10.348338752212523L24.1617,8.213328752212524Z" fill="#F4F7FF" fill-opacity="1" /></g></g></g></svg>
+                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -224,22 +246,23 @@ const RolesPage = () => {
                                     )}
                                 </table>
                             </div>
+
                             <div className="absolute bottom-0 right-0 flex gap-2">
                                 <button
                                     disabled={currentPage === 1}
+                                    onClick={() => setCurrentPage((p) => p - 1)}
                                     className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
                                 >
                                     <ArrowLeft size={14} />
-                                    {t('Previous')}
+                                    {t("Previous")}
                                 </button>
-                                <button className="font-medium text-xs text-[#181D26] py-1 px-3 bg-[#D4AB0B]">
-                                    {currentPage}
-                                </button>
+                                <button className="font-medium text-xs text-[#181D26] py-1 px-3 bg-[#D4AB0B]">{currentPage}</button>
                                 <button
                                     disabled={currentPage === totalPages}
+                                    onClick={() => setCurrentPage((p) => p + 1)}
                                     className="flex items-center gap-1 font-medium text-xs leading-[21px] text-[#B3BACA] disabled:opacity-50"
                                 >
-                                    {t('Next')}
+                                    {t("Next")}
                                     <ArrowRight size={14} />
                                 </button>
                             </div>
@@ -248,6 +271,7 @@ const RolesPage = () => {
                 </div>
             </div>
 
+            {/* Add Role Modal */}
             <AnimatePresence>
                 {addRole && (
                     <motion.div
@@ -262,10 +286,10 @@ const RolesPage = () => {
                             role="dialog"
                             aria-modal="true"
                             className="absolute right-0 top-0 h-full w-full max-w-[568px] bg-[#252C38] shadow-xl overflow-auto"
-                            initial={{ x: '100%' }}
+                            initial={{ x: "100%" }}
                             animate={{ x: 0 }}
-                            exit={{ x: '100%' }}
-                            transition={{ type: 'spring', stiffness: 320, damping: 32 }}
+                            exit={{ x: "100%" }}
+                            transition={{ type: "spring", stiffness: 320, damping: 32 }}
                             onClick={(e) => e.stopPropagation()}
                         >
                             <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-6">
@@ -321,7 +345,7 @@ const RolesPage = () => {
                                         type="submit"
                                         className="flex justify-center items-center font-medium text-base text-[#181D26] bg-[#EFBF04] px-12 py-3 border border-[#EFBF04] rounded-full hover:bg-[#181D26] hover:text-[#EFBF04] transition"
                                     >
-                                        {loading ? <Loader primary /> : 'Save'}
+                                        {loading ? <Loader primary /> : "Save"}
                                     </button>
                                 </div>
                             </form>
@@ -329,6 +353,8 @@ const RolesPage = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Edit Role Modal */}
             <AnimatePresence>
                 {editRole && editedRole && (
                     <motion.div
