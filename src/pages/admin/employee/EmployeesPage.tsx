@@ -19,6 +19,8 @@ import { User } from "../../../types/user";
 const EmployeesPage = () => {
     const navigate = useNavigate();
 
+    const [user, setUser] = useState<User>();
+
     const [addEmployee, setAddEmployee] = useState(false);
     const [editEmployee, setEditEmployee] = useState(false);
     const [deleteEmployee, setDeleteEmployee] = useState(false);
@@ -327,12 +329,20 @@ const EmployeesPage = () => {
     };
 
     useEffect(() => {
+        const data = localStorage.getItem('user');
+        if (!data) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigate('/auth/login');
+            return
+        }
+
+        setUser(JSON.parse(data));
+
         audit();
         fetchEmployees();
         fetchRoles();
     }, []);
-
-
 
     const anyOverlayOpen = addEmployee || editEmployee || deleteEmployee || uploadEmployee || sidebar;
     useEffect(() => {
@@ -427,7 +437,7 @@ const EmployeesPage = () => {
     return (
         <SecondLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
-            <div className='flex flex-col gap-6 px-6 pb-20 w-full min-h-[calc(100vh-91px)] h-full'>
+            <div className='flex flex-col gap-6 px-6 pb-20 w-full min-h-[calc(100vh-91px)] h-full 2xl:pr-[156px]'>
                 <div className="flex flex-col flex-1 gap-10 bg-[#252C38] p-6 rounded-lg w-full h-full">
                     <div className="w-full flex justify-between items-center gap-4 flex-wrap">
                         <div className="flex items-end gap-4 w-fit flex-wrap md:flex-nowrap">
@@ -497,43 +507,47 @@ const EmployeesPage = () => {
                                                     <td className="text-[#F4F7FF] pt-6 pb-3 ">{maskPhone(data.mobile)}</td>
                                                     <td className="text-[#F4F7FF] pt-6 pb-3 ">{data.role.name}</td>
                                                     <td className="flex justify-center items-center pt-6 pb-3 ">
-                                                        <div className="font-medium text-sm text-[#19CE74] px-6 py-2 bg-[rgba(25,206,116,0.16)] border-[1px] border-[#19CE74] rounded-full w-fit">
+                                                        <div className="font-medium text-sm text-[#19CE74] px-6 py-2 bg-[rgba(25,206,116,0.16)] border-[1px] border-[#19CE74] rounded-full w-fit capitalize">
                                                             {data.status}
                                                         </div>
                                                     </td>
                                                     <td className="pt-6 pb-3">
                                                         <div className="flex gap-6 items-center justify-center">
-                                                            <svg
-                                                                height="28px"
-                                                                version="1.1"
-                                                                viewBox="0 0 18 15"
-                                                                width="28px"
-                                                                className="cursor-pointer"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                onClick={() => handleStatusUpdate(data.id, 'accepted')}
-                                                            >
-                                                                <g fill="none" fillRule="evenodd" stroke="none" strokeWidth="1">
-                                                                    <g fill="#ffffff" transform="translate(-423.000000, -47.000000)">
-                                                                        <g transform="translate(423.000000, 47.500000)">
-                                                                            <path d="M6,10.2 L1.8,6 L0.4,7.4 L6,13 L18,1 L16.6,-0.4 L6,10.2 Z" />
+                                                            {data.status == 'inactive' && (
+                                                                <>
+                                                                    <svg
+                                                                        height="28px"
+                                                                        version="1.1"
+                                                                        viewBox="0 0 18 15"
+                                                                        width="28px"
+                                                                        className="cursor-pointer"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        onClick={() => handleStatusUpdate(data.id, 'accepted')}
+                                                                    >
+                                                                        <g fill="none" fillRule="evenodd" stroke="none" strokeWidth="1">
+                                                                            <g fill="#ffffff" transform="translate(-423.000000, -47.000000)">
+                                                                                <g transform="translate(423.000000, 47.500000)">
+                                                                                    <path d="M6,10.2 L1.8,6 L0.4,7.4 L6,13 L18,1 L16.6,-0.4 L6,10.2 Z" />
+                                                                                </g>
+                                                                            </g>
                                                                         </g>
-                                                                    </g>
-                                                                </g>
-                                                            </svg>
-                                                            <svg
-                                                                height="28"
-                                                                viewBox="0 0 16 16"
-                                                                width="28"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                onClick={() => handleStatusUpdate(data.id, 'rejected')}
-                                                                className='cursor-pointer'
-                                                            >
-                                                                <polygon
-                                                                    fill="white"
-                                                                    fillRule="evenodd"
-                                                                    points="8 9.414 3.707 13.707 2.293 12.293 6.586 8 2.293 3.707 3.707 2.293 8 6.586 12.293 2.293 13.707 3.707 9.414 8 13.707 12.293 12.293 13.707 8 9.414"
-                                                                />
-                                                            </svg>
+                                                                    </svg>
+                                                                    <svg
+                                                                        height="28"
+                                                                        viewBox="0 0 16 16"
+                                                                        width="28"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        onClick={() => handleStatusUpdate(data.id, 'rejected')}
+                                                                        className='cursor-pointer'
+                                                                    >
+                                                                        <polygon
+                                                                            fill="white"
+                                                                            fillRule="evenodd"
+                                                                            points="8 9.414 3.707 13.707 2.293 12.293 6.586 8 2.293 3.707 3.707 2.293 8 6.586 12.293 2.293 13.707 3.707 9.414 8 13.707 12.293 12.293 13.707 8 9.414"
+                                                                        />
+                                                                    </svg>
+                                                                </>
+                                                            )}
                                                             <svg className="cursor-pointer" onClick={() => setUploadEmployee(true)} xmlns="http://www.w3.org/2000/svg" fill="none" version="1.1" width="28" height="28" viewBox="0 0 28 28">
                                                                 <path d="M11.4628,19.672H16.7664C17.4957,19.672,18.0923,19.0753,18.0923,18.3461V11.7165H20.2005C21.3806,11.7165,21.9772,10.2846,21.1419,9.44925L15.056,3.36334C14.5401,2.84633,13.7025,2.84633,13.1865,3.36334L7.10061,9.44925C6.26529,10.2846,6.84869,11.7165,8.02874,11.7165H10.1369V18.3461C10.1369,19.0753,10.7336,19.672,11.4628,19.672ZM6.15921,22.3238H22.0701C22.7993,22.3238,23.396,22.9204,23.396,23.6497C23.396,24.3789,22.7993,24.9756,22.0701,24.9756H6.15921C5.42997,24.9756,4.83331,24.3789,4.83331,23.6497C4.83331,22.9204,5.42997,22.3238,6.15921,22.3238Z" fill="#F4F7FF" />
                                                             </svg>
