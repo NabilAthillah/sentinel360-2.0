@@ -164,7 +164,7 @@ const RolesPage = () => {
     return (
         <MainLayout>
             <Sidebar isOpen={true} closeSidebar={undefined} />
-            <div className="flex flex-col gap-4 pr-[156px] pl-4 pb-20 w-full h-full flex-1">
+            <div className="flex flex-col gap-4 px-4 pb-20 w-full h-full flex-1">
                 <h2 className="text-2xl leading-9 text-white font-noto">Roles</h2>
                 <div className="flex flex-col gap-8 w-full h-full flex-1">
                     <Navbar />

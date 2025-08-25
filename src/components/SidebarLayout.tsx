@@ -1,6 +1,4 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { X } from 'lucide-react';
-import React from 'react'
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -21,12 +19,12 @@ const SidebarLayout = ({ isOpen, closeSidebar }: { isOpen: boolean; closeSidebar
                 >
                     {/* Logo + Close button */}
                     <div className="flex flex-col items-center py-6 relative">
-                        <img src="/images/logo.png" alt="Logo" className="w-[92px]" />
-                        <X
-                            onClick={() => closeSidebar(false)}
-                            color='#ffffff'
-                            className='absolute right-4 top-4 block md:hidden cursor-pointer'
-                        />
+                        <Link
+                            to="/dashboard"
+                            className="text-[#F1C40F] font-inter max-w-[74px] text-center text-sm hover:underline"
+                        >
+                            <img src="/images/logo.png" alt="Logo" className="w-[92px]" />
+                        </Link>
                     </div>
 
                     <div className="w-full flex flex-col items-center pb-20">

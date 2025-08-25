@@ -753,7 +753,7 @@ const EmployeesPage = () => {
                                         type="submit"
                                         className="bg-[#EFBF04] text-[#181D26] rounded-full px-6 py-2 hover:bg-[#181D26] hover:text-[#EFBF04]"
                                     >
-                                        {loading ? "Saving..." : t("Save")}
+                                        {loading ? <Loader primary /> : t("Save")}
                                     </button>
                                 </div>
                             </form>

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"; // <- import useNavigate
 import 'react-toastify/dist/ReactToastify.css';
 import authService from "../../services/authService";
 import api from "../../utils/api";
+import Loader from "../../components/Loader";
 
 const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -159,7 +160,7 @@ const LoginPage: React.FC = () => {
           disabled={loading}
           className={`w-full flex justify-center items-center py-4 text-center text-[#181D26] font-medium bg-[#EFBF04] border-[1px] border-[#EFBF04] rounded-full transition-all hover:text-[#EFBF04] hover:bg-[#181D26] ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
         >
-          {loading ? "Loading..." : "Login"}
+          {loading ? <Loader primary /> : "Login"}
         </button>
       </form>
     </div>
