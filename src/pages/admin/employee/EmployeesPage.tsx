@@ -13,8 +13,8 @@ import SidebarLayout from "../../../components/SidebarLayout";
 import SecondLayout from "../../../layouts/SecondLayout";
 import employeeService from "../../../services/employeeService";
 import roleService from "../../../services/roleService";
-import { Employee } from "../../../types/employee";
 import { Role } from "../../../types/role";
+import { User } from "../../../types/user";
 
 const EmployeesPage = () => {
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ const EmployeesPage = () => {
     const [sidebar, setSidebar] = useState(true);
 
     const [roles, setRoles] = useState<Role[]>([]);
-    const [employees, setEmployees] = useState<Employee[]>([]); const [deleteId, setDeleteId] = useState<string>('');
+    const [employees, setEmployees] = useState<User[]>([]); const [deleteId, setDeleteId] = useState<string>('');
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [switchStates, setSwitchStates] = useState<{ [key: number]: boolean }>({});
     const [reasons, setReasons] = useState<{ [key: number]: string }>({});
@@ -70,7 +70,7 @@ const EmployeesPage = () => {
         date_joined: ''
     });
 
-    const [editData, setEditData] = useState<Employee | null>();
+    const [editData, setEditData] = useState<User | null>();
 
     const goToNextPage = () => {
         if (currentPage < totalPages) setCurrentPage((p) => p + 1);
@@ -179,17 +179,17 @@ const EmployeesPage = () => {
                 return;
             }
 
-            if (!editData || !editData.user) {
+            if (!editData) {
                 toast.error("Invalid employee or user data.");
                 return;
             }
 
-            if (!editData.user.mobile) {
+            if (!editData.mobile) {
                 toast.error("Mobile number cannot be null.");
                 return;
             }
 
-            if (!editData.user.role) {
+            if (!editData.role) {
                 toast.error("Role cannot be null.");
                 return;
             }
@@ -209,15 +209,14 @@ const EmployeesPage = () => {
 
             const response = await employeeService.editEmployee(
                 editData.id,
-                editData.user.name,
+                editData.name,
                 editData.nric_fin_no,
-                editData.user.mobile,
-                editData.user.email,
-                editData.user.role.id,
-                editData.reporting || null,
+                editData.mobile,
+                editData.email,
+                editData.role.id,
                 formatDateTime(editData.briefing_date),
                 editData.birth || null,
-                editData.user.address || '',
+                editData.address || '',
                 editData.briefing_conducted ?? null,
                 editData.date_joined ?? null,
                 profileBase64,
@@ -294,8 +293,6 @@ const EmployeesPage = () => {
             const response = await employeeService.getAllEmployee(token);
             if (response.success) {
                 setEmployees(response.data);
-                const filtered = response.data.filter((emp: Employee) => emp.user.id !== currentUser.id);
-
             }
         } catch (error) {
             console.error(error);
@@ -359,8 +356,8 @@ const EmployeesPage = () => {
 
     const filteredEmployees = searchTerm.trim()
         ? employees.filter((emp) =>
-            emp.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            emp.user?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            emp?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            emp?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
             emp.nric_fin_no?.toLowerCase().includes(searchTerm.toLowerCase())
         )
         : [];
@@ -386,11 +383,11 @@ const EmployeesPage = () => {
         const rows = employees.map((emp, index) => [
             index + 1,
             emp.nric_fin_no || '',
-            emp.user?.name || '',
-            emp.user?.mobile || '',
-            emp.user?.email || '',
-            emp.user?.role?.name || '',
-            emp.user?.status || '',
+            emp?.name || '',
+            emp?.mobile || '',
+            emp?.email || '',
+            emp?.role?.name || '',
+            emp?.status || '',
         ]);
         const csvContent = [headers, ...rows]
             .map(row => row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(';'))
@@ -495,13 +492,13 @@ const EmployeesPage = () => {
                                             (searchTerm.trim() !== '' ? filteredEmployees : currentEmployees).map((data, index) => (
                                                 <tr className="border-b-[1px] border-b-[#98A1B3]" key={data.id}>
                                                     <td className="text-[#F4F7FF] pt-6 pb-3">{(searchTerm.trim() !== '' ? 0 : indexOfFirstEmployee) + index + 1}</td>
-                                                    <td className="text-[#F4F7FF] pt-6 pb-3 ">{data.user.name}</td>
+                                                    <td className="text-[#F4F7FF] pt-6 pb-3 ">{data.name}</td>
                                                     <td className="text-[#F4F7FF] pt-6 pb-3 ">{maskPhone(data.nric_fin_no)}</td>
-                                                    <td className="text-[#F4F7FF] pt-6 pb-3 ">{maskPhone(data.user.mobile)}</td>
-                                                    <td className="text-[#F4F7FF] pt-6 pb-3 ">{data.user.role.name}</td>
+                                                    <td className="text-[#F4F7FF] pt-6 pb-3 ">{maskPhone(data.mobile)}</td>
+                                                    <td className="text-[#F4F7FF] pt-6 pb-3 ">{data.role.name}</td>
                                                     <td className="flex justify-center items-center pt-6 pb-3 ">
                                                         <div className="font-medium text-sm text-[#19CE74] px-6 py-2 bg-[rgba(25,206,116,0.16)] border-[1px] border-[#19CE74] rounded-full w-fit">
-                                                            {data.user.status}
+                                                            {data.status}
                                                         </div>
                                                     </td>
                                                     <td className="pt-6 pb-3">
@@ -814,9 +811,9 @@ const EmployeesPage = () => {
                                         type="text"
                                         className="bg-[#222834] text-[#F4F7FF] text-base placeholder:text-[#98A1B3]"
                                         placeholder="Name"
-                                        value={editData.user?.name ?? ''}
+                                        value={editData.name ?? ''}
                                         onChange={(e) =>
-                                            setEditData((prev) => prev ? { ...prev, user: { ...prev.user, name: e.target.value } } : null)
+                                            setEditData((prev) => prev ? { ...prev, user: { ...prev, name: e.target.value } } : null)
                                         }
                                         required
                                     />
@@ -850,11 +847,11 @@ const EmployeesPage = () => {
                                     <label className="text-xs text-[#98A1B3]">{t('Mobile')}</label>
                                     <PhoneInput
                                         country={'sg'}
-                                        value={editData?.user?.mobile ?? ''}
+                                        value={editData?.mobile ?? ''}
                                         onChange={(phone) => {
                                             const onlyNumbers = phone.replace(/\s/g, '');
                                             const withPlus = `+${onlyNumbers}`;
-                                            setEditData((prev) => prev ? { ...prev, user: { ...prev.user, mobile: withPlus } } : null);
+                                            setEditData((prev) => prev ? { ...prev, user: { ...prev, mobile: withPlus } } : null);
                                         }}
                                         enableLongNumbers
                                         inputProps={{ inputMode: 'tel' }}
@@ -872,8 +869,8 @@ const EmployeesPage = () => {
                                         type="text"
                                         className="bg-[#222834] text-[#F4F7FF] text-base placeholder:text-[#98A1B3]"
                                         placeholder="Email"
-                                        value={editData?.user?.email ?? ''}
-                                        onChange={(e) => setEditData((prev) => prev ? { ...prev, user: { ...prev.user, email: e.target.value } } : null)}
+                                        value={editData?.email ?? ''}
+                                        onChange={(e) => setEditData((prev) => prev ? { ...prev, user: { ...prev, email: e.target.value } } : null)}
                                         required
                                     />
                                 </div>
@@ -884,8 +881,8 @@ const EmployeesPage = () => {
                                         type="text"
                                         className="bg-[#222834] text-[#F4F7FF] text-base placeholder:text-[#98A1B3]"
                                         placeholder="Address"
-                                        value={editData?.user?.address ?? ''}
-                                        onChange={(e) => setEditData((prev) => prev ? { ...prev, user: { ...prev.user, address: e.target.value } } : null)}
+                                        value={editData?.address ?? ''}
+                                        onChange={(e) => setEditData((prev) => prev ? { ...prev, user: { ...prev, address: e.target.value } } : null)}
                                         required
                                     />
                                 </div>
@@ -894,16 +891,16 @@ const EmployeesPage = () => {
                                     <label className="text-xs text-[#98A1B3]">{t('Role')}</label>
                                     <select
                                         className="bg-[#222834] text-[#F4F7FF] text-base placeholder:text-[#98A1B3] outline-none"
-                                        value={editData?.user?.role?.id || ''}
+                                        value={editData?.role?.id || ''}
                                         onChange={(e) => {
                                             setEditData((prev) => {
-                                                if (!prev || !prev.user) return prev;
+                                                if (!prev) return prev;
                                                 const selectedRole = roles.find((r) => r.id === e.target.value);
                                                 if (!selectedRole) return prev;
                                                 return {
                                                     ...prev,
-                                                    user: { ...prev.user, role: { id: selectedRole.id, name: selectedRole.name } },
-                                                } as Employee;
+                                                    role: { id: selectedRole.id, name: selectedRole.name },
+                                                } as User;
                                             });
                                         }}
                                     >

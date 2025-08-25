@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import Loader from "../../../../components/Loader";
-import MainLayout from "../../../../layouts/MainLayout";
+import SecondLayout from "../../../../layouts/SecondLayout";
 import { useTranslation } from "react-i18next";
 import SidebarLayout from "../../../../components/SidebarLayout";
 import authService from "../../../../services/authService";
@@ -139,18 +139,15 @@ const ProfilePage = () => {
     };
 
     return (
-        <MainLayout>
+        <SecondLayout>
             <SidebarLayout isOpen={sidebar} closeSidebar={setSidebar} />
-            <div className="flex flex-col gap-4 px-6 pb-20 w-full h-full">
-                <h2 className="text-2xl leading-9 text-white font-noto">
-                    {t("Profile")}
-                </h2>
+            <div className="flex flex-col gap-4 px-6 pb-20 w-full h-full flex-1">
                 {!user ? (<Loader primary={true} />) : (
-                    <div className="flex gap-6 flex-wrap lg:flex-nowrap">
+                    <div className="flex gap-6 flex-wrap justify-center flex-1 lg:flex-nowrap">
                         <div className="flex flex-col w-full gap-6 lg:max-w-80">
                             <div className="flex flex-col gap-4 bg-[#252C38] lg:max-w-80 w-full h-fit p-4 rounded-lg">
                                 <p className="font-semibold text-base leading-[20px] text-[#EFBF04]">
-                                    {user.role.name}
+                                    {user.name}
                                 </p>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-[#98A1B3]">{t("NRIC")}</label>
@@ -161,6 +158,10 @@ const ProfilePage = () => {
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-[#98A1B3]">{t("Company")}</label>
                                     <p className="text-base text-[#F4F7FF]">Sentinel Group</p>
+                                </div>
+                                <div className="flex flex-col gap-1">
+                                    <label className="text-xs text-[#98A1B3]">{t("Role")}</label>
+                                    <p className="text-base text-[#F4F7FF]">{user.role.name}</p>
                                 </div>
                                 <div className="flex flex-col gap-1">
                                     <label className="text-xs text-[#98A1B3]">{t("Contact")}</label>
@@ -174,7 +175,7 @@ const ProfilePage = () => {
                         </div>
                         <form
                             onSubmit={handleSubmit}
-                            className="w-full p-6 h-full rounded-lg bg-[#252C38] flex flex-col gap-8"
+                            className="w-full lg:max-w-[552px] p-6 h-full rounded-lg bg-[#252C38] flex flex-col gap-8"
                         >
                             <div className="flex flex-col gap-6">
                                 <div className="flex flex-col max-w-[520px] w-full px-4 pt-2 py-2 bg-[#222834] border-b border-b-[#98A1B3]">
@@ -313,7 +314,7 @@ const ProfilePage = () => {
                     </div>
                 )}
             </div>
-        </MainLayout>
+        </SecondLayout>
     );
 };
 

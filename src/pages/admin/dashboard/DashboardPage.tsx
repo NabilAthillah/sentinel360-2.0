@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import MainLayout from '../../../layouts/MainLayout';
 import { Site } from '../../../types/site';
@@ -23,6 +23,7 @@ const DashboardPage = () => {
     const [sites, setSites] = useState<Site[]>([]);
     const [sidebar, setSidebar] = useState(true);
     const [user, setUser] = useState<User | null>(null);
+    const location = useLocation();
 
     // cek login tiap hari
     const isToday = (dateString: string) => {
@@ -114,7 +115,7 @@ const DashboardPage = () => {
                     Hello {user?.name}
                 </h2>
                 <div className="flex-1">
-                    <Map sites={sites} />
+                    <Map key={location.key} sites={sites} />
                 </div>
             </div>
             ) : (

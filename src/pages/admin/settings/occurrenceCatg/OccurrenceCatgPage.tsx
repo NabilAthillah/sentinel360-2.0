@@ -1,13 +1,12 @@
-import { Switch } from "@material-tailwind/react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import Loader from "../../../../components/Loader";
 import Navbar from "../../../../components/Navbar";
-import MainLayout from "../../../../layouts/MainLayout";
-import { useTranslation } from "react-i18next";
 import Sidebar from "../../../../components/Sidebar";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import MainLayout from "../../../../layouts/MainLayout";
 
 type Category = {
     id: string;
@@ -220,9 +219,9 @@ const OccurrenceCatgPage = () => {
                                                 <tr>
                                                     <td
                                                         colSpan={4}
-                                                        className="text-center text-white py-4"
+                                                        className="text-center text-gray-400 py-6 italic"
                                                     >
-                                                        No categories found.
+                                                        No data available
                                                     </td>
                                                 </tr>
                                             )}

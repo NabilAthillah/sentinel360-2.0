@@ -21,7 +21,7 @@ const SidebarLayout = ({ isOpen, closeSidebar }: { isOpen: boolean; closeSidebar
                 >
                     {/* Logo + Close button */}
                     <div className="flex flex-col items-center py-6 relative">
-                        <img src="/images/logo.png" alt="Logo" className="w-[96px]" />
+                        <img src="/images/logo.png" alt="Logo" className="w-[92px]" />
                         <X
                             onClick={() => closeSidebar(false)}
                             color='#ffffff'
@@ -32,7 +32,7 @@ const SidebarLayout = ({ isOpen, closeSidebar }: { isOpen: boolean; closeSidebar
                     <div className="w-full flex flex-col items-center pb-20">
                         <Link
                             to="/dashboard"
-                            className="text-[#F1C40F] font-medium hover:underline"
+                            className="text-[#F1C40F] font-inter max-w-[74px] text-center text-sm hover:underline"
                         >
                             {t("Back to Dashboard")}
                         </Link>

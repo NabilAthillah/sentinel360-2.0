@@ -12,10 +12,8 @@ export type User = {
         role: Role;
         nric_fin_no: string;
         briefing_date: string;
-        user: User;
         birth? : string;
         briefing_conducted?: string;
-        reporting: User;
         date_joined?: string;
         status?: string;
         language?: string;

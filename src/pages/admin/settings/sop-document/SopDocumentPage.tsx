@@ -1,16 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import { toast } from "react-toastify";
 import DeleteModal from "../../../../components/DeleteModal";
 import Loader from "../../../../components/Loader";
 import Navbar from "../../../../components/Navbar";
-import MainLayout from "../../../../layouts/MainLayout";
-import { useTranslation } from 'react-i18next';
 import Sidebar from "../../../../components/Sidebar";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import MainLayout from "../../../../layouts/MainLayout";
 import sopDocumentService from "../../../../services/sopDocumentService";
-import { IncidentType } from "../../../../types/incidentType";
 
 interface SopDocument {
     id: string;
@@ -262,11 +260,15 @@ const SopDocumentPage = () => {
                                                         </td>
                                                     </tr>
                                                 ))
-                                            ) : (<tr>
-                                                <td colSpan={4} className="text-center text-white py-4">
-                                                    {t('No document found')}.
-                                                </td>
-                                            </tr>
+                                            ) : (
+                                                <tr>
+                                                    <td
+                                                        colSpan={4}
+                                                        className="text-center text-gray-400 py-6 italic"
+                                                    >
+                                                        No data available
+                                                    </td>
+                                                </tr>
                                             )}
                                         </tbody>)}
                                 </table>

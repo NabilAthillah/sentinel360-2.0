@@ -92,6 +92,8 @@ const SecondLayout = ({ children }: { children: React.ReactNode }) => {
             return 'Guard Tours';
         } else if (pathname == '/dashboard/audit-trails') {
             return 'Audit Trails';
+        } else if (pathname == '/dashboard/settings/profile') {
+            return 'Profile';
         } else {
             return '';
         }

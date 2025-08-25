@@ -86,13 +86,15 @@ const SettingsAttendancePage = () => {
     return (
         <MainLayout>
             <Sidebar isOpen={true} closeSidebar={undefined} />
-            <div className='flex flex-col gap-4 pr-[156px] pl-4 pb-20 w-full h-full'>
+            <div className='flex flex-col gap-4 px-4 pb-20 w-full h-full'>
                 <h2 className='text-2xl leading-9 text-white font-noto'>{t('Settings')}</h2>
                 <div className="flex flex-col gap-8 w-full h-full">
                     <Navbar />
                     <div className="bg-[#252C38] p-6 rounded-lg w-full h-full">
                         {loading || fetching ? (
-                            <Loader primary={true} />
+                            <div className="w-full flex justify-center">
+                                <Loader primary={true} />
+                            </div>
                         ) : (
                             <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-x-12 gap-y-6 sm:grid-cols-2">
                                 {formData.map((item, index) => (

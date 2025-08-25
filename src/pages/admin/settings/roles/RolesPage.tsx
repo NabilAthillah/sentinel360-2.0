@@ -1,14 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
-import Navbar from "../../../../components/Navbar";
-import MainLayout from "../../../../layouts/MainLayout";
-import Loader from "../../../../components/Loader";
-import Sidebar from "../../../../components/Sidebar";
-import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import roleService from "../../../../services/roleService";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import Loader from "../../../../components/Loader";
+import Navbar from "../../../../components/Navbar";
+import Sidebar from "../../../../components/Sidebar";
+import MainLayout from "../../../../layouts/MainLayout";
 import permissionService from "../../../../services/permissionService";
+import roleService from "../../../../services/roleService";
 
 type Role = {
     id: string;
@@ -223,25 +223,36 @@ const RolesPage = () => {
                                         </tbody>
                                     ) : (
                                         <tbody>
-                                            {currentItems.map((data, index) => (
-                                                <tr key={data.id}>
-                                                    <td className="text-[#F4F7FF] pt-6 pb-3">{indexOfFirstItem + index + 1}</td>
-                                                    <td className="text-[#F4F7FF] pt-6 pb-3">{data.name}</td>
-                                                    <td className="pt-6 pb-3">
-                                                        <div className="flex gap-6 items-center justify-center">
-                                                            <button
-                                                                onClick={() => {
-                                                                    setEditedRole(data);
-                                                                    setEditRole(true);
-                                                                }}
-                                                                className="text-white hover:text-blue-500"
-                                                            >
-                                                                <svg onClick={() => { setEditedRole(data); setEditRole(true) }} className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" version="1.1" width="28" height="28" viewBox="0 0 28 28"><defs><clipPath id="master_svg0_247_14308"><rect x="0" y="0" width="28" height="28" rx="0" /></clipPath></defs><g><g clip-path="url(#master_svg0_247_14308)"><g><path d="M3.5,20.124948752212525L3.5,24.499948752212525L7.875,24.499948752212525L20.7783,11.596668752212524L16.4033,7.2216687522125245L3.5,20.124948752212525ZM24.1617,8.213328752212524C24.6166,7.759348752212524,24.6166,7.0223187522125246,24.1617,6.568328752212524L21.4317,3.8383337522125243C20.9777,3.3834207522125244,20.2406,3.3834207522125244,19.7867,3.8383337522125243L17.651699999999998,5.973328752212524L22.0267,10.348338752212523L24.1617,8.213328752212524Z" fill="#F4F7FF" fill-opacity="1" /></g></g></g></svg>
-                                                            </button>
-                                                        </div>
+                                            {currentItems.length > 0 ? (
+                                                currentItems.map((data, index) => (
+                                                    <tr key={data.id}>
+                                                        <td className="text-[#F4F7FF] pt-6 pb-3">{indexOfFirstItem + index + 1}</td>
+                                                        <td className="text-[#F4F7FF] pt-6 pb-3">{data.name}</td>
+                                                        <td className="pt-6 pb-3">
+                                                            <div className="flex gap-6 items-center justify-center">
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setEditedRole(data);
+                                                                        setEditRole(true);
+                                                                    }}
+                                                                    className="text-white hover:text-blue-500"
+                                                                >
+                                                                    <svg onClick={() => { setEditedRole(data); setEditRole(true) }} className="cursor-pointer" xmlns="http://www.w3.org/2000/svg" fill="none" version="1.1" width="28" height="28" viewBox="0 0 28 28"><defs><clipPath id="master_svg0_247_14308"><rect x="0" y="0" width="28" height="28" rx="0" /></clipPath></defs><g><g clip-path="url(#master_svg0_247_14308)"><g><path d="M3.5,20.124948752212525L3.5,24.499948752212525L7.875,24.499948752212525L20.7783,11.596668752212524L16.4033,7.2216687522125245L3.5,20.124948752212525ZM24.1617,8.213328752212524C24.6166,7.759348752212524,24.6166,7.0223187522125246,24.1617,6.568328752212524L21.4317,3.8383337522125243C20.9777,3.3834207522125244,20.2406,3.3834207522125244,19.7867,3.8383337522125243L17.651699999999998,5.973328752212524L22.0267,10.348338752212523L24.1617,8.213328752212524Z" fill="#F4F7FF" fill-opacity="1" /></g></g></g></svg>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td
+                                                        colSpan={4}
+                                                        className="text-center text-gray-400 py-6 italic"
+                                                    >
+                                                        No data available
                                                     </td>
                                                 </tr>
-                                            ))}
+                                            )}
                                         </tbody>
                                     )}
                                 </table>
